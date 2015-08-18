@@ -59,10 +59,10 @@ from gdf import dt2secs
 from gdf import make_dir
 from gdf import directory_writable
 
-from eotools.utils import log_multiline
+from gdf._gdfutils import log_multiline
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG) # Logging level for this module
+logger.setLevel(logging.INFO) # Logging level for this module
 
 class AGDC2GDF(GDF):
     DEFAULT_CONFIG_FILE = 'agdc2gdf_default.conf' # N.B: Assumed to reside in code root directory
@@ -348,8 +348,9 @@ order by end_datetime
                 elif len(data_array.shape) == 2:
                     gdfnetcdf.write_slice(variable_name, data_array, {'T': slice_index})
 
+            gdfnetcdf.sync() # Write cached data to disk      
             slice_index += 1
-                 
+            
         del gdfnetcdf # Close the netCDF
         
         logger.debug('Moving temporary storage unit %s to %s', temp_storage_path, storage_path)

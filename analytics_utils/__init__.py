@@ -9,6 +9,7 @@ import numpy as np
 from scipy import ndimage
 from scipy.io import netcdf
 import csv
+from osgeo import gdal, osr
 
 '''
 Utils class for:
@@ -97,7 +98,8 @@ def plot3D(array_result):
 		data[data == -999] = 0
 		ax = fig.add_subplot(num_rowcol,num_rowcol,plot_count)
 		cax = ax.imshow(data, interpolation='nearest', aspect = 'equal')
-		fig.colorbar(cax)
+# TODO: including the color bar is causing crashes in formatting on some system (left > right reported by matplotlib)
+#		fig.colorbar(cax)
 		plt.title("%s %d" % (array_result.keys()[0], plot_count))
 		plt.xlabel(array_result['array_output']['dimensions_order'][1])
 		plt.ylabel(array_result['array_output']['dimensions_order'][2])
@@ -115,14 +117,14 @@ def writeTXY_to_GeoTiff(array_result, filename):
 		filename: name of output GeoTiff file
 	'''
 
-	no_data_value = array_result['plan']['array_output'].values()[0]['no_data_value']
+	no_data_value = array_result['array_output']['no_data_value']
 
-	dims = array_result['array_result'].shape
-	dim_order = array_result['plan']['array_output'].values()[0]['dimensions_order']
+	dims = array_result['array_output']['shape']
+	dim_order = array_result['array_output']['dimensions_order']
 
-	num_t = array_result['array_result'].shape[0]
-	rows = array_result['array_result'].shape[1]
-	cols = array_result['array_result'].shape[2]
+	num_t = dims[0]
+	rows = int(dims[1])
+	cols = int(dims[2])
 
 	driver = gdal.GetDriverByName('GTiff')
 	dataset = driver.Create(filename, rows, cols, num_t, gdal.GDT_Int16)
@@ -136,15 +138,15 @@ def writeTXY_to_GeoTiff(array_result, filename):
 	dataset.SetProjection(proj.ExportToWkt())
 	
 	# set geo transform
-	xmin = array_result['plan']['array_output'].values()[0]['dimensions']['X']['range'][0]
-	ymax = array_result['plan']['array_output'].values()[0]['dimensions']['Y']['range'][1]
+	xmin = array_result['array_output']['dimensions']['X']['range'][0]
+	ymax = array_result['array_output']['dimensions']['Y']['range'][1]
 	pixel_size = 0.00025
 	geotransform = (xmin, pixel_size, 0, ymax,0, -pixel_size)  
 	dataset.SetGeoTransform(geotransform)
 
 	for i in range(num_t):
 		band = dataset.GetRasterBand(i+1)
-		band.WriteArray(array_result['array_result'][i])
+		band.WriteArray(array_result['array_result'].values()[0][i])
 		band.SetNoDataValue(no_data_value)
 		band.FlushCache()
 
@@ -157,11 +159,11 @@ def writeNDVI2NetCDF(array_result, filename):
 		filename: name of output NetCDF file
 	'''
 
-	no_data_value = array_result['plan']['array_output'].values()[0]['no_data_value']
-
-	num_t = array_result['array_result'].shape[0]
-	rows = array_result['array_result'].shape[1]
-	cols = array_result['array_result'].shape[2]
+	no_data_value = array_result['array_output']['no_data_value']
+	dims = array_result['array_output']['shape']
+	num_t = dims[0]
+	rows = int(dims[1])
+	cols = int(dims[2])
 
 	pixel_size = 0.00025
 	grid_size = rows * pixel_size
@@ -230,9 +232,9 @@ def writeToCSV(array_result, filename):
 
 	with open(filename, 'w') as fp:
 		writer = csv.writer(fp, delimiter=',')
-		for i in range(array_result['array_result'].shape[0]):
-			data = array_result['array_result'][i].tolist()
-			if len(array_result['array_result'].shape) == 1:
+		for i in range(int(array_result['array_output']['shape'][0])):
+			data = array_result['array_result'].values()[0][i].tolist()
+			if len(array_result['array_result'].values()[0].shape) == 1:
 				writer.writerow([data])
 			else:
 				writer.writerow(data)

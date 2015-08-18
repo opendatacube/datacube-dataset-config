@@ -49,9 +49,7 @@ from pprint import pprint
 from math import floor
 from distutils.util import strtobool
 
-from eotools.utils import log_multiline
-
-# Set handler for root logger to standard output 
+# Set handler for root logger to standard output
 console_handler = logging.StreamHandler(sys.stdout)
 #console_handler.setLevel(logging.INFO)
 console_handler.setLevel(logging.DEBUG)
@@ -66,7 +64,8 @@ from _database import Database, CachedResultSet
 from _arguments import CommandLineArgs
 from _config_file import ConfigFile
 from _gdfnetcdf import GDFNetCDF
-from _gdfutils import dt2secs, secs2dt, days2dt, dt2days, make_dir, directory_writable
+from _gdfutils import dt2secs, secs2dt, days2dt, dt2days, make_dir, directory_writable, log_multiline
+
 
 thread_exception = None
 

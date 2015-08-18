@@ -39,10 +39,10 @@ import logging
 import ConfigParser
 import collections
 
-from eotools.utils import log_multiline
+from _gdfutils import log_multiline
 
 logger = logging.getLogger(__name__)
-#logger.setLevel(logging.DEBUG) # Logging level for this module
+logger.setLevel(logging.INFO) # Logging level for this module
 
 class ConfigFile(object):
     def _parse_config_file(self):
