@@ -1,0 +1,22 @@
+name: terra_aster_gdm_v2_scene
+description: Global Elevation Data from TERRA stallite's ASTER sensor.
+metadata_type: eo
+
+metadata:
+  platform:
+    code: TERRA
+  instrument:
+    name: ASTER
+  format:
+    name: GeoTiff
+  product_type: GDEM_V2
+
+measurements:
+  - name: dem
+    dtype: int16
+    nodata: -9999
+    units: 'metre'
+  - name: num
+    dtype: int16
+    nodata: -9999
+    units: 'metre'
