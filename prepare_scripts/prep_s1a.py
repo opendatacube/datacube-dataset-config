@@ -17,6 +17,9 @@ format (that is, when provided an img it checks for an accompanying hdr).
 # coords failing to enclose the area due to curvature of the projected border segments.
 import rasterio.warp
 from osgeo import osr
+import sys
+import click
+import yaml
 def get_geometry(path):
     with rasterio.open(path) as img:
         left, bottom, right, top = img.bounds
@@ -90,17 +93,21 @@ def prep_dataset(path):
     }
 
 
+@click.command(help="Prepare S1A data processed with GPT in BEAM-DIMAP format dataset for ingestion into the Data Cube.")
+@click.argument('datasets',
+                type=click.Path(exists=True, readable=True, writable=True),
+                nargs=-1)
+def main(datasets):
+    for dataset in datasets:
+        scene = dataset
+        assert scene.lower().endswith('.dim'), "Expect the BEAM-DIMAP header file as input"
+        print "Starting for dataset " + scene
+        metadata = prep_dataset(scene)
+        yaml_path = scene[:-3] + 'yaml' # change suffix
 
-import sys
-import yaml
+        with open(yaml_path,'w') as stream:
+            yaml.dump(metadata,stream)
 
-if len(sys.argv) != 2:
-    print("Usage: python prep.py scene.dim")
-else:
-    scene = sys.argv[-1]
-    assert scene.lower().endswith('.dim'), "Expect the BEAM-DIMAP header file as input"
-    metadata = prep_dataset(scene)
-    yaml_path = scene[:-3] + 'yaml' # change suffix
 
-    with open(yaml_path,'w') as stream:
-        yaml.dump(metadata,stream)
+if __name__ == "__main__":
+    main()

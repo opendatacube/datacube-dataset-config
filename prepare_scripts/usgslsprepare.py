@@ -159,8 +159,8 @@ def prep_dataset(fields, path):
             'projection': get_projection(path/next(iter(images.values()))['path'])
         },
         'image': {
-            'satellite_ref_point_start': {'path': int(fields["path"]), 'row': int(fields["row"])},
-            'satellite_ref_point_end': {'path': int(fields["path"]), 'row': int(fields["row"])},
+            'satellite_ref_point_start': {'x': int(fields["path"]), 'y': int(fields["row"])},
+            'satellite_ref_point_end': {'x': int(fields["path"]), 'y': int(fields["row"])},
             'bands': images
         },
         #TODO include 'lineage': {'source_datasets': {'lpgs_metadata_file': lpgs_metadata_file}}

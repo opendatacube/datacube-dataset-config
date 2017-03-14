@@ -8,7 +8,7 @@ file_path_template: 'Vietnam/S1A_SAR_GAMMA0_4326_{tile_index[0]}_{tile_index[1]}
 global_attributes:
   title: CEOS SEO Data Cube Sentinel-1A SAR Gamma0
   summary: Sentinel-1A Synthetic Aperture Radar Gamma0 data prepared AMA using the SNAP Tool
-  history: This data represents a tile and reprojection of Sentinel-1 SAR granule data. 
+  history: This data represents a tile and reprojection of Sentinel-1 SAR granule data.
   institution: ESA
   instrument: SAR
   cdm_data_type: Grid
@@ -26,6 +26,12 @@ global_attributes:
   license: https://creativecommons.org/licenses/by/4.0/
   naming_authority: au.gov.ga
   acknowledgment: Sentinel-1 data is provided by the European Space Agency on behalf of the European Commission via download.
+
+ingestion_bounds:
+  left: 100.0
+  bottom: 5.0
+  right: 115.0
+  top: 20.0
 
 storage:
   driver: NetCDF CF
