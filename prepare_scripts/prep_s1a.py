@@ -70,6 +70,7 @@ def prep_dataset(path):
     bands = ['vh','vv']
     bandpaths = [str(os.path.join(path[:-3]+'data','Gamma0_' + pol.upper() + '_db.img'))
     			for pol in bands]
+    print path[:-3]+'data'
 
     # trusting bands coaligned, use one to generate spatial bounds for all
 
