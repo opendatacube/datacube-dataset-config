@@ -1,10 +1,10 @@
 source_type: ls5_ledaps_scene
-output_type: ls5_ledaps_lake_chad_full
+output_type: ls5_ledaps_bangladesh
 
 description: Landsat 5 LEDAPS 30 metre, (EPSG:4326)
 
 location: '/datacube/ingested_data'
-file_path_template: 'LS5_TM_LEDAPS/Lake_Chad_Full/LS5_TM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+file_path_template: 'LS5_TM_LEDAPS/Bangladesh/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
 global_attributes:
   title: CEOS Data Cube Landsat Surface Reflectance
   summary: Landsat 5 Thematic Mapper Analysis Ready data prepared by NASA on behalf of CEOS.
@@ -26,24 +26,26 @@ global_attributes:
   acknowledgment: Landsat data is provided by the United States Geological Survey (USGS).
 
 ingestion_bounds: # Specified in Storage CRS coordinates. Will expand to tile boundaries.
-  left: 11.4
-  bottom: 12.0
-  right: 16.6
-  top: 15.5
+  #colombia - just the mini cube:
+  left: 88
+  bottom: 22
+  right: 92
+  top: 26
 
 storage:
   driver: NetCDF CF
 
   crs: EPSG:4326
   tile_size:
-          longitude: 0.833070
-          latitude: 0.813456
+          longitude: 0.884502
+          latitude: 0.812583
   resolution:
-          longitude: 0.000277690
-          latitude: -0.000271152
+          #colombia (1/length of 1 degree in meters there / 30 meters per pixel
+          longitude: 0.000294834
+          latitude: -0.000270861
   chunking:
-      longitude: 200
-      latitude: 200
+      longitude: 500
+      latitude: 500
       time: 1
   dimension_order: ['time', 'latitude', 'longitude']
 
@@ -120,7 +122,7 @@ measurements:
           long_name: "CFmask Cloud Confidence"
     - name: adjacent_cloud_qa
       dtype: int16
-      nodata: 0
+      nodata: 255
       resampling_method: nearest
       src_varname: 'sr_adjacent_cloud_qa'
       zlib: True
