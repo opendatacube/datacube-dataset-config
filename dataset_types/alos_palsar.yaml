@@ -1,0 +1,49 @@
+name: alos_palsar_tile
+description: ALOS PALSAR mosaic tiles generated for use in the Data Cube - 25m pixel spacing, WGS84. These tiles are derived from the orignal JAXA mosaics with some additional products such as RGB images and conversion to GeoTIFF.
+metadata_type: eo
+
+metadata:
+    platform:
+        code: ALOS
+    instrument:
+        name: PALSAR
+    product_type: gamma0
+    format:
+        name: GeoTiff
+
+measurements:
+    - name: 'hh_gamma0'
+      aliases: [hh]
+      dtype: int16
+      nodata: 0
+      units: '1'
+    - name: 'hv_gamma0'
+      aliases: [hv]
+      dtype: int16
+      nodata: 0
+      units: '1'
+    - name: 'observation_date'
+      aliases: [date]
+      dtype: int16
+      nodata: -1
+      units: '1'
+    - name: 'incidence_angle'
+      aliases: [linci, incidence]
+      dtype: uint8
+      nodata: 0
+      units: '1'
+    - name: 'mask'
+      aliases: [mask]
+      dtype: uint8
+      nodata: 0
+      units: '1'
+      flags_definition:
+        cloud_confidence:
+          bits: [0,1,2,3,4,5,6,7]
+          description: Mask image as provided by JAXA - Ocean and water, lay over, shadowing, land.
+          values:
+            0: no_data
+            50: water
+            100: lay_over
+            150: shadowing
+            255: land
