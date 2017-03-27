@@ -146,12 +146,10 @@ def prep_dataset(fields, path):
     #    lpgs_metadata_file = (global_metadata.find('{http://espa.cr.usgs.gov/v1.2}lpgs_metadata_file')).text
     #    groundstation = lpgs_metadata_file[16:19]
     #    fields.update({'instrument': instrument, 'satellite': satellite})
-    aos = crazy_parse('2016-03-01T23:59:59')
+    aos = crazy_parse('20' + fields['mosaic_year'] + '-01-01T00:00:00')
     los = aos
     fields['creation_dt'] = aos
     fields['satellite'] = 'ALOS_2'
-    start_time = aos
-    end_time = los
     images = {
         band_name(im_path): {
             'path': str(im_path.relative_to(path))
@@ -178,8 +176,8 @@ def prep_dataset(fields, path):
             }
         },
         'extent': {
-            'from_dt': str(start_time),
-            'to_dt': str(end_time),
+            'from_dt': str(aos),
+            'to_dt': str(aos),
             'center_dt': str(aos)
         },
         'format': {
