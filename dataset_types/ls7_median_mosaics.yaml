@@ -1,5 +1,5 @@
-name: custom_scene
-description: Landsat 7 LEDAPS 30 metre. Will be used for all ls7 scenes, which are then split into utms on the ingestion config level.
+name: ls7_ledaps_mosaic_scene
+description: Landsat 7 LEDAPS 30 metre median pixel mosaics computed yearly.
 metadata_type: eo
 
 metadata:

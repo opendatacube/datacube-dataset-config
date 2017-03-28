@@ -1,15 +1,15 @@
-source_type: custom_scene
-output_type: custom_scene_output
+source_type: ls7_ledaps_mosaic_scene
+output_type: LS7_ETM_LEDAPS_MOSAIC
 
-description: Landsat 7 LEDAPS 30 metre, 1deg tile, WGS84 projection (EPSG:4326)
+description: Landsat 7 LEDAPS 30 meters, near 0.94 degrees tile, WGS84 Projection (EPSG:4326)
 
-location: '/datacube/ingested_data'
-file_path_template: 'LS7_ETM_LEDAPS/Custom_Test/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+location: '/dc_storage'
+file_path_template: 'LS7_ETM_LEDAPS/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
 global_attributes:
   title: CEOS Data Cube Landsat Surface Reflectance
   summary: Landsat 7 Enhanced Thematic Mapper Plus Analysis Ready data prepared by NASA on behalf of CEOS.
   source: Surface reflectance from LEDAPS
-  institution: CEOS
+  institution: IDEAM
   instrument: ETM
   cdm_data_type: Grid
   keywords: AU/GA,NASA/GSFC/SED/ESD/LANDSAT,REFLECTANCE,ETM+,TM,OLI,EARTH SCIENCE
@@ -25,20 +25,35 @@ global_attributes:
   naming_authority: gov.usgs
   acknowledgment: Landsat data is provided by the United States Geological Survey (USGS).
 
+# These are the actual extents of your ingestion region. In your email, you have specified
+# the bounds found below.
+ingestion_bounds: # Specified in Storage CRS coordinates. Will expand to tile boundaries.
+  left: -82
+  bottom: -5
+  right: -66
+  top: 14
+
 storage:
   driver: NetCDF CF
 
   crs: EPSG:4326
+  # Using the values for resolution below, select a tile size that is evenly divisible by the resolution.
+  # You can do this however you want, I normally just multiply by 3500. This would yield a 3500 pixel tile size.
   tile_size:
-          longitude: 0.9479715
-          latitude: 0.9494975
+          latitude:  0.949557
+          longitude: 0.9449825
+  # Find the length of a degree using this url: http://msi.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html
+  # Use the midpoint of the min/max latitudes in the ingestion bounds. In this case, use 3.5
+  # For latitude/longitude length in meters, do: 30 / length in meters to find resolution.
+  # Round to 9 decimal places if necessary.
   resolution:
-          #colombia (1/length of 1 degree in meters there / 30 meters per pixel
-          longitude: 0.000270849
-          latitude: -0.000271285
+          # At 3.5 latitude, one degree of latitude=110578m. 30/110578 = 0.0002713017 -> round to 0.000271302
+          latitude: -0.000271302
+          # At 3.5 latitude, one degree of longitude=111113m. 30/111113 = 0.00026999541 -> round to 0.000269995
+          longitude: 0.000269995
   chunking:
-      longitude: 500
-      latitude: 500
+      latitude: 200
+      longitude: 200
       time: 1
   dimension_order: ['time', 'latitude', 'longitude']
 
