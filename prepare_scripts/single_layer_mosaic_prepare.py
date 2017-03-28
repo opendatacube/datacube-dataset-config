@@ -212,7 +212,7 @@ def main(datasets, processing_level, product_type, platform_code, instrument, ba
     arg_instrument = ''
 
     arg_processing_level = str(processing_level) if processing_level is not None else 'sr_refl'
-    arg_product_type = str(product_type) if product_type is not None else 'LEDAPS'
+    arg_product_type = str(product_type) if product_type is not None else 'LEDAPS_MOSAIC'
     arg_platform_code = str(platform_code) if platform_code is not None else 'LANDSAT_7'
     arg_instrument = str(instrument) if instrument is not None else 'ETM'
 
@@ -234,7 +234,8 @@ def main(datasets, processing_level, product_type, platform_code, instrument, ba
             if file.endswith(".img") or file.endswith(".tif"):
                 print("Found file...")
                 print("Preparing file: " + str(path) + "/" + file)
-                data = prep_dataset(path, file, arg_processing_level, arg_product_type, arg_platform_code, arg_instrument, arg_bands)
+                data = prep_dataset(path, file, arg_processing_level, arg_product_type, arg_platform_code,
+                                    arg_instrument, arg_bands)
                 file_name = file.split(".")[0]
                 yaml_path = str(path.joinpath(file_name + '.yaml'))
                 logging.info("Writing %s", yaml_path)

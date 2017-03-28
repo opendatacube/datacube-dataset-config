@@ -1,10 +1,10 @@
 source_type: ls7_ledaps_mosaic_scene
 output_type: LS7_ETM_LEDAPS_MOSAIC
 
-description: Landsat 7 LEDAPS 30 meters, near 0.94 degrees tile, WGS84 Projection (EPSG:4326)
+description: Landsat 7 LEDAPS 30 meters, near 0.94 degrees tile, WGS84 Projection (EPSG:4326), median pixel yearly mosaic.
 
 location: '/dc_storage'
-file_path_template: 'LS7_ETM_LEDAPS/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+file_path_template: 'LS7_ETM_LEDAPS_MOSAIC/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
 global_attributes:
   title: CEOS Data Cube Landsat Surface Reflectance
   summary: Landsat 7 Enhanced Thematic Mapper Plus Analysis Ready data prepared by NASA on behalf of CEOS.
