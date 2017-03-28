@@ -151,7 +151,7 @@ def prep_dataset(nbar_path, prep_file, processing_level, product_type, platform_
         },
         'grid_spatial': {
             'projection': {
-                'spatial_reference': str(src.crs),
+                'spatial_reference': str(src.crs.wkt),
                 'geo_ref_points': {
                     'ul': {
                         'x': left,
@@ -216,7 +216,7 @@ def main(datasets, processing_level, product_type, platform_code, instrument, ba
     arg_platform_code = str(platform_code) if platform_code is not None else 'LANDSAT_7'
     arg_instrument = str(instrument) if instrument is not None else 'ETM'
 
-    arg_bands = bands if bands is not None else ["1=sr_band3", "2=sr_band4", "3=sr_band5", "4=sr_band7"]
+    arg_bands = bands if len(bands) > 0 else ["1=sr_band3", "2=sr_band4", "3=sr_band5", "4=sr_band7"]
 
     if arg_product_type is None or arg_platform_code is None:
         print(
@@ -234,7 +234,7 @@ def main(datasets, processing_level, product_type, platform_code, instrument, ba
             if file.endswith(".img") or file.endswith(".tif"):
                 print("Found file...")
                 print("Preparing file: " + str(path) + "/" + file)
-                data = prep_dataset(path, file, processing_level, product_type, platform_code, instrument, bands)
+                data = prep_dataset(path, file, arg_processing_level, arg_product_type, arg_platform_code, arg_instrument, arg_bands)
                 file_name = file.split(".")[0]
                 yaml_path = str(path.joinpath(file_name + '.yaml'))
                 logging.info("Writing %s", yaml_path)
