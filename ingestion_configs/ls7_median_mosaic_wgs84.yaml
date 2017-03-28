@@ -57,6 +57,8 @@ storage:
       time: 1
   dimension_order: ['time', 'latitude', 'longitude']
 
+fuse_data: copy
+
 measurements:
     - name: red
       dtype: int16
