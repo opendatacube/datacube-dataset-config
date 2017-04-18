@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage:   ingest.sh original_data_path dataset_type ingestion_config
-# Example: ingest.sh /micro_cube/kenya_original_data dataset_types/ls7_sr_scenes_wgs84_kenya.yaml ingestion_configs/ls7_sr_scenes_wgs84_kenya.yaml
+# Example: ingest.sh /micro_cube/kenya_original_data ls7_ledaps_scene ingestion_configs/ls7_sr_scenes_wgs84_kenya.yaml
 
 start_time=$(date)
 

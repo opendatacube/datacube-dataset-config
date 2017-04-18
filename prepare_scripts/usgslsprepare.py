@@ -16,6 +16,13 @@ import rasterio.warp
 import click
 from osgeo import osr
 import os
+# image boundary imports
+import rasterio
+from rasterio.errors import RasterioIOError
+import rasterio.features
+import shapely.affinity
+import shapely.geometry
+import shapely.ops
 
 _STATIONS = {
     '023': 'TKSC',
@@ -49,6 +56,16 @@ _STATIONS = {
 }
 
 
+def _to_lists(x):
+    """
+    Returns lists of lists when given tuples of tuples
+    """
+    if isinstance(x, tuple):
+        return [_to_lists(el) for el in x]
+
+    return x
+
+
 def band_name(path):
     name = path.stem
     position = name.find('_')
@@ -60,6 +77,7 @@ def band_name(path):
 
     else:
         layername = name[position + 1:]
+
     return layername
 
 
@@ -67,7 +85,7 @@ def get_projection(path):
     with rasterio.open(str(path)) as img:
         left, bottom, right, top = img.bounds
         return {
-            'spatial_reference': str(img.crs.wkt),
+            'spatial_reference': str(str(getattr(img, 'crs_wkt', None) or img.crs.wkt)),
             'geo_ref_points': {
                 'ul': {
                     'x': left,
@@ -115,58 +133,33 @@ def crazy_parse(timestr):
 
 
 def prep_dataset(fields, path):
-
+    images_list = []
     for file in os.listdir(str(path)):
-        print "examining file: ", file
         if file.endswith(".xml") and (not file.endswith('aux.xml')):
-            print "found xml file "
             metafile = file
-    # Parse xml ElementTree gives me a headache so using lxml
-    doc = ElementTree.parse(os.path.join(str(path), metafile))
-    root = doc.getroot()
-    print "got root Attrib: ", root.attrib, " text: ", root.text
-    #TODO root method doesn't work here - need to include xlmns...
-    #    print "found global metadata",global_metadata.text
-    global_metadata = None
+        if file.endswith(".tif") and ("band" in file):
 
-    for root_child in root:
-        if (root_child.tag[-15:] == "global_metadata"):
-            print "found global metadata tag"
-            global_metadata = root_child
-            prepend = global_metadata.tag
-            prepend = prepend.replace('global_metadata', '')
-            print "determined prepend as:", prepend
-    #  print "Child found: ", root_child.tag, "|",root_child.attrib,"|", root_child.text
+            images_list.append(os.path.join(str(path), file))
+    with open(os.path.join(str(path), metafile)) as f:
+        xmlstring = f.read()
+    xmlstring = re.sub(r'\sxmlns="[^"]+"', '', xmlstring, count=1)
+    doc = ElementTree.fromstring(xmlstring)
 
-    for child in global_metadata:
-        print "Child found: ", child.tag, "|", child.attrib, "|", child.text
-        name = child.tag.replace(prepend, "")
-        print "matching: ", name
-        if (name == 'satellite'):
-            satellite = child.text
-        if (name == 'instrument'):
-            instrument = child.text
-        if (name == 'acquisition_date'):
-            acquisition_date = child.text.replace("-", "")
-        if (name == 'scene_center_time'):
-            scene_center_time = child.text[:8]
-        if (name == 'lpgs_metadata_file'):
-            lpgs_metadata_file = child.text
-
-    print "determined acquisition_date as: ", acquisition_date
+    satellite = doc.find('.//satellite').text
+    instrument = doc.find('.//instrument').text
+    acquisition_date = doc.find('.//acquisition_date').text.replace("-", "")
+    scene_center_time = doc.find('.//scene_center_time').text[:8]
     center_dt = crazy_parse(acquisition_date + "T" + scene_center_time)
     aos = crazy_parse(acquisition_date + "T" + scene_center_time) - timedelta(seconds=(24 / 2))
-    print "determined aos as: ", aos
     los = aos + timedelta(seconds=24)
+    lpgs_metadata_file = doc.find('.//lpgs_metadata_file').text
     groundstation = lpgs_metadata_file[16:19]
     fields.update({'instrument': instrument, 'satellite': satellite})
-    print "completed pulling general metadata"
 
-    print "about to use aos, hope it's set!"
     start_time = aos
     end_time = los
     images = {band_name(im_path): {'path': str(im_path.relative_to(path))} for im_path in path.glob('*.tif')}
-
+    projdict = get_projection(path / next(iter(images.values()))['path'])
     doc = {
         'id': str(uuid.uuid4()),
         'processing_level': fields["level"],
@@ -180,10 +173,10 @@ def prep_dataset(fields, path):
         },
         'acquisition': {
             'groundstation': {
-                'name': groundstation,
-                'aos': str(aos),
-                'los': str(los)
-            }
+                'code': groundstation,
+            },
+            'aos': str(aos),
+            'los': str(los)
         },
         'extent': {
             'from_dt': str(start_time),
@@ -194,7 +187,7 @@ def prep_dataset(fields, path):
             'name': 'GeoTiff'
         },
         'grid_spatial': {
-            'projection': get_projection(path / next(iter(images.values()))['path'])
+            'projection': projdict
         },
         'image': {
             'satellite_ref_point_start': {
@@ -207,7 +200,6 @@ def prep_dataset(fields, path):
             },
             'bands': images
         },
-        #TODO include 'lineage': {'source_datasets': {'lpgs_metadata_file': lpgs_metadata_file}}
         'lineage': {
             'source_datasets': {}
         }
@@ -238,24 +230,21 @@ def prepare_datasets(nbar_path):
         'creation_dt': (
             (crazy_parse(fields["productyear"] + '0101T00:00:00')) + timedelta(days=int(fields["julianday"])))
     })
-    print "About to prep dataset"
     nbar = prep_dataset(fields, nbar_path)
-    print "Completed preping dataset"
     return (nbar, nbar_path)
 
 
 @click.command(help="Prepare USGS LS dataset for ingestion into the Data Cube.")
 @click.argument('datasets', type=click.Path(exists=True, readable=True, writable=True), nargs=-1)
 def main(datasets):
-    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
-    print "Entering program"
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
+
     for dataset in datasets:
         path = Path(dataset)
-        print "Processing", path
+
         logging.info("Processing %s", path)
-        print "About to prepare datasets"
         documents = prepare_datasets(path)
-        print "completed preparing dataset, about to write output"
+
         dataset, folder = documents
         yaml_path = str(folder.joinpath('agdc-metadata.yaml'))
         logging.info("Writing %s", yaml_path)
