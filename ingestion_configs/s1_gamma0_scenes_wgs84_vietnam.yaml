@@ -1,7 +1,7 @@
 source_type: s1a_gamma0_scene
 output_type: s1a_gamma0_vietnam
 
-description: Sentinel-1A GAMMA0 product converted to decibels using the SNAP Tool
+description: Sentinel-1A SAR Gamma0, processed to the CEOS ARD standard - Orbit updates, GRD border noise, thermal noise, radiometric calibration and terrain correction, orthorectification.
 
 location: '/datacube/ingested_data/S1A_SAR_GAMMA0/'
 file_path_template: 'Vietnam/S1A_SAR_GAMMA0_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'

@@ -1,13 +1,5 @@
-# Sentinel 1 A+B  SAR  Product Definitions
-#
-# These are used to group together the individual scene datasets
-# that will be indexed into the datacube.
-#
-# Note: currently setting nodata as 0 rather than NaN
-
-
 name: s1a_gamma0_scene
-description: Sentinel-1A SAR Gamma0
+description: Sentinel-1A SAR Gamma0, processed to the CEOS ARD standard - Orbit updates, GRD border noise, thermal noise, radiometric calibration and terrain correction, orthorectification.
 metadata_type: eo
 
 metadata:
@@ -18,19 +10,19 @@ metadata:
 
 measurements:
 - name: vh
-  units: 'dB'
+  units: 'DN'
   dtype: float32
   nodata: 0
 
 - name: vv
-  units: 'dB'
+  units: 'DN'
   dtype: float32
   nodata: 0
 
 ---
 
 name: s1b_gamma0_scene
-description: Sentinel-1B SAR Gamma0
+description: Sentinel-1B SAR Gamma0, processed to the CEOS ARD standard - Orbit updates, GRD border noise, thermal noise, radiometric calibration and terrain correction, orthorectification.
 metadata_type: eo
 
 metadata:
@@ -41,11 +33,11 @@ metadata:
 
 measurements:
 - name: vh
-  units: 'dB'
+  units: 'DN'
   dtype: float32
   nodata: 0
 
 - name: vv
-  units: 'dB'
+  units: 'DN'
   dtype: float32
   nodata: 0
