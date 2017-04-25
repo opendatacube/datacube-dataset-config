@@ -43,7 +43,7 @@ measurements:
       nodata: -9999
       units: 'reflectance'
     - name: 'sr_atmos_opacity'
-      aliases: [atmos_op]
+      aliases: [atmos_opacity]
       dtype: uint8
       nodata: 0
       units: 'unitless'

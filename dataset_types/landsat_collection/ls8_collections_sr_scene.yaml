@@ -13,27 +13,32 @@ metadata:
 
 measurements:
     - name: 'sr_band1'
-      aliases: [band_1, blue]
+      aliases: [band_1, coastal_aerosol]
       dtype: int16
       nodata: -9999
       units: 'reflectance'
     - name: 'sr_band2'
-      aliases: [band_2, green]
+      aliases: [band_2, blue]
       dtype: int16
       nodata: -9999
       units: 'reflectance'
     - name: 'sr_band3'
-      aliases: [band_3, red]
+      aliases: [band_3, green]
       dtype: int16
       nodata: -9999
       units: 'reflectance'
     - name: 'sr_band4'
-      aliases: [band_4, nir]
+      aliases: [band_4, red]
       dtype: int16
       nodata: -9999
       units: 'reflectance'
     - name: 'sr_band5'
-      aliases: [band_5, swir1]
+      aliases: [band_5, nir]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band6'
+      aliases: [band_6, swir1]
       dtype: int16
       nodata: -9999
       units: 'reflectance'
