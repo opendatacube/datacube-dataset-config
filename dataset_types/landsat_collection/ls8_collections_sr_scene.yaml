@@ -73,8 +73,8 @@ measurements:
             8192: Unused
             16384: Unused
             32786: Unused
-    - name: 'aerosol_qa'
-      aliases: [aerosol_qa, aerosol]
+    - name: 'sr_aerosol'
+      aliases: [sr_aerosol_qa, aerosol_qa, aerosol]
       dtype: uint8
       nodata: 0
       units: 'bit_index'
