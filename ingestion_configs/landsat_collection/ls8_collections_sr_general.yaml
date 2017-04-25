@@ -118,11 +118,11 @@ measurements:
       dtype: uint8
       nodata: 0
       resampling_method: nearest
-      src_varname: 'aerosol_qa'
+      src_varname: 'sr_aerosol'
       zlib: True
       attrs:
           long_name: "Aerosol Quality Attributes Bit Index"
-          alias: [aerosol_qa]
+          alias: [sr_aerosol_qa, sr_aerosol]
     - name: 'radsat_qa'
       dtype: int32
       nodata: 1
