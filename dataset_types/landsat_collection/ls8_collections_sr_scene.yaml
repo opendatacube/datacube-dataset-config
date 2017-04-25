@@ -6,7 +6,7 @@ metadata:
     platform:
         code: LANDSAT_8
     instrument:
-        name: OLI
+        name: OLI_TIRS
     product_type: LaSRC
     format:
         name: GeoTiff

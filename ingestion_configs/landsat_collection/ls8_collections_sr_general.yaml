@@ -10,7 +10,7 @@ global_attributes:
   summary: Landsat 8 Operational Land Imager ARD prepared by NASA on behalf of CEOS.
   source: LaSRC surface reflectance product prepared using USGS Collection 1 data.
   institution: CEOS
-  instrument: OLI
+  instrument: OLI_TIRS
   cdm_data_type: Grid
   keywords: AU/GA,NASA/GSFC/SED/ESD/LANDSAT,REFLECTANCE,ETM+,TM,OLI,EARTH SCIENCE
   keywords_vocabulary: GCMD

@@ -131,6 +131,11 @@ def band_name(sat, path):
     return name[41:]
 
 
+def get_product_type_from_code(sat_code):
+    product_type = {'LE07': 'LEDAPS', 'LC08': 'LaSRC', 'LT04': 'LEDAPS', 'LT05': 'LEDAPS'}
+    return product_type[sat_code]
+
+
 def get_projection(path):
     with rasterio.open(str(path)) as img:
         left, bottom, right, top = img.bounds
@@ -213,8 +218,8 @@ def prep_dataset(fields, path):
     projdict['valid_data'] = safe_valid_region(images_list)
     doc = {
         'id': str(uuid.uuid4()),
-        'processing_level': fields["level"],
-        'product_type': fields["type"],
+        'processing_level': fields["processing_level"],
+        'product_type': fields["product_type"],
         'creation_dt': fields["creation_dt"],
         'platform': {
             'code': fields["satellite"]
@@ -276,10 +281,10 @@ def prepare_datasets(nbar_path):
                        r"(?P<collection_category>RT|T1|T2)"), nbar_path.stem).groupdict()
 
     fields.update({
-        'level':
-        'ARD',
-        'type':
-        'LS_USGS_ARD',
+        'processing_level':
+        fields['collection_category'],
+        'product_type':
+        get_product_type_from_code(fields['code']),
         'creation_dt':
         datetime.datetime(int(fields['productyear']), int(fields['productmonth']), int(fields['productday']))
     })
