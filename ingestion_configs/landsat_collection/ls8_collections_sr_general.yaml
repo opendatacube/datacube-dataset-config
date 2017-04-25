@@ -1,5 +1,5 @@
 source_type: ls8_collections_sr_scene
-output_type: ls8_larsc_general
+output_type: ls8_lasrc_general
 
 description: Landsat 8 USGS Collection 1 Higher Level SR scene proessed using LaSRC. Resampled to 30m EPSG:4326 projection with a sub degree tile size.
 
