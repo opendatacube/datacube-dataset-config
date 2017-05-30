@@ -4,7 +4,7 @@ output_type: ls7_ledaps_general
 description: Landsat 7 USGS Collection 1 Higher Level SR scene proessed using LEDAPS. Resampled to 30m EPSG:4326 projection with a sub degree tile size.
 
 location: '/datacube/ingested_data'
-file_path_template: 'LS7_ETM_LEDAPS/General/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}.nc'
+file_path_template: 'LS7_ETM_LEDAPS/General/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{tile_index[2]}.nc'
 global_attributes:
   title: CEOS Data Cube Landsat Surface Reflectance
   summary: Landsat 7 Enhanced Thematic Mapper Plus ARD prepared by NASA on behalf of CEOS.

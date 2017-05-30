@@ -110,7 +110,7 @@ def prep_dataset(path):
         'product_type': "gamma0",
         'creation_dt': t0,
         'platform': {
-            'code': 'SENTINEL_1A'
+            'code': 'SENTINEL_1'
         },
         'instrument': {
             'name': 'SAR'
@@ -139,7 +139,7 @@ def prep_dataset(path):
 
 
 @click.command(
-    help="Prepare S1A data processed with GPT in BEAM-DIMAP format dataset for ingestion into the Data Cube.")
+    help="Prepare S1A/B data processed with GPT in BEAM-DIMAP format dataset for ingestion into the Data Cube.")
 @click.argument('datasets', type=click.Path(exists=True, readable=True, writable=True), nargs=-1)
 def main(datasets):
     for dataset in datasets:

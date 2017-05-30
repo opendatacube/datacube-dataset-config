@@ -1,5 +1,5 @@
 name: ls7_collections_sr_scene
-description: Landsat 7 USGS Collection 1 Higher Level SR scene proessed using LEDAPS. 30m UTM based projection.
+description: Landsat 7 USGS Collection 1 Higher Level SR scene processed using LEDAPS. 30m UTM based projection.
 metadata_type: eo
 
 metadata:
