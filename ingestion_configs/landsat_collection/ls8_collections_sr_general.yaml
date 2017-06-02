@@ -4,7 +4,7 @@ output_type: ls8_lasrc_general
 description: Landsat 8 USGS Collection 1 Higher Level SR scene proessed using LaSRC. Resampled to 30m EPSG:4326 projection with a sub degree tile size.
 
 location: '/datacube/ingested_data'
-file_path_template: 'LS8_OLI_LaSRC/General/LS8_OLI_LaSRC_4326_{tile_index[0]}_{tile_index[1]}_{tile_index[2]}.nc'
+file_path_template: 'LS8_OLI_LaSRC/General/LS8_OLI_LaSRC_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
 global_attributes:
   title: CEOS Data Cube Landsat Surface Reflectance
   summary: Landsat 8 Operational Land Imager ARD prepared by NASA on behalf of CEOS.
