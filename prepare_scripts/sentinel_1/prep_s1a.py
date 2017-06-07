@@ -118,7 +118,7 @@ def prep_dataset(path):
         'extent': {
             'coord': extent,
             'from_dt': str(t0),
-            'from_dt': str(t1),
+            'to_dt': str(t1),
             'center_dt': str(t0 + (t1 - t0) / 2)
         },
         'format': {
