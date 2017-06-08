@@ -270,14 +270,18 @@ def dataset_folder(fields):
 
 
 def prepare_datasets(nbar_path):
-
-    fields = re.match((r"(?P<code>LC08|LE07|LT05|LT04)"
+    # LE07_L1TP_195054_20000101_20170215_01_T1
+    fields = re.match((r"(?P<code>LC08|LE07|LT05|LT04)_"
+                       r"(?P<correctionlevel>L1TP|L1GT|L1GS)_"
                        r"(?P<path>[0-9]{3})"
-                       r"(?P<row>[0-9]{3})"
+                       r"(?P<row>[0-9]{3})_"
                        r"(?P<productyear>[0-9]{4})"
                        r"(?P<productmonth>[0-9]{2})"
-                       r"(?P<productday>[0-9]{2})"
-                       r"(?P<collection_number>[0-9]{2})"
+                       r"(?P<productday>[0-9]{2})_"
+                       r"(?P<processedyear>[0-9]{4})"
+                       r"(?P<processedmonth>[0-9]{2})"
+                       r"(?P<processedday>[0-9]{2})_"
+                       r"(?P<collection_number>[0-9]{2})_"
                        r"(?P<collection_category>RT|T1|T2)"), nbar_path.stem).groupdict()
 
     fields.update({
