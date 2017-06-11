@@ -127,7 +127,6 @@ def band_name(sat, path):
     #hardcoded based on the length of the scene id. We don't want to use
     #red, green, blue, etc.
     name = path.stem
-    print(name[41:])
     return name[41:]
 
 
