@@ -187,18 +187,19 @@ def crazy_parse(timestr):
 
 
 def prep_dataset(fields, path):
+    # getting the list of all images
     images_list = []
     for file in os.listdir(str(path)):
         if file.endswith(".xml") and (not file.endswith('aux.xml')):
             metafile = file
         if file.endswith(".tif") and ("band" in file):
-
             images_list.append(os.path.join(str(path), file))
+
+    # parsing xml based metadata
     with open(os.path.join(str(path), metafile)) as f:
         xmlstring = f.read()
     xmlstring = re.sub(r'\sxmlns="[^"]+"', '', xmlstring, count=1)
     doc = ElementTree.fromstring(xmlstring)
-
     satellite = doc.find('.//satellite').text
     instrument = doc.find('.//instrument').text
     acquisition_date = doc.find('.//acquisition_date').text.replace("-", "")
@@ -209,12 +210,17 @@ def prep_dataset(fields, path):
     lpgs_metadata_file = doc.find('.//lpgs_metadata_file').text
     groundstation = lpgs_metadata_file[16:19]
     fields.update({'instrument': instrument, 'satellite': satellite})
-
     start_time = aos
     end_time = los
+
+    # getting the paths to each of the band datasets
     images = {band_name(satellite, im_path): {'path': str(im_path.relative_to(path))} for im_path in path.glob('*.tif')}
+
+    #getting the projection details
     projdict = get_projection(path / next(iter(images.values()))['path'])
     projdict['valid_data'] = safe_valid_region(images_list)
+
+    # generating the .yaml document
     doc = {
         'id': str(uuid.uuid4()),
         'processing_level': fields["processing_level"],

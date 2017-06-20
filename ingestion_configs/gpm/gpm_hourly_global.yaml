@@ -1,0 +1,72 @@
+source_type: gpm_imerg_gis_hourly
+output_type: gpm_imerg_gis_hourly_global
+
+description: "Global NetCDF GPM IMERG GIS data"
+
+location: '/datacube/ingested_data/GPM_Hourly/'
+file_path_template: 'Global/GPM_GIS_IMERG_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+global_attributes:
+  title: Hourly GPM IMERG product converted to the GIS format.
+  summary: Hourly GPM IMERG product converted to the GIS format.
+  institution: CEOS
+  instrument: GPM
+  keywords: GPM,Precipitation
+  platform: GPM
+  processing_level: L3
+  product_version: V04A
+  product_suite: IMERG
+  publisher_url: https://pmm.nasa.gov/data-access/downloads/gpm
+  coverage_content_type: physicalMeasurement
+  acknowledgment: Data provided by https://pps.gsfc.nasa.gov/
+
+# ingestion_bounds:
+#   left: 100.0
+#   bottom: 5.0
+#   right: 115.0
+#   top: 20.0
+
+storage:
+  driver: NetCDF CF
+
+  crs: EPSG:4326
+  tile_size:
+          longitude: 180
+          latitude: 90
+  resolution:
+          longitude: 0.10
+          latitude: -0.10
+  chunking:
+      longitude: 300
+      latitude: 300
+      time: 1
+  dimension_order: ['time', 'latitude', 'longitude']
+
+measurements:
+    - name: total_precipitation
+      dtype: int32
+      nodata: 9999
+      units: '0.10 mm/h'
+      resampling_method: nearest
+      src_varname: 'total_precipitation'
+      zlib: True
+    - name: liquid_precipitation
+      dtype: int32
+      nodata: 9999
+      units: '0.10 mm/h'
+      resampling_method: nearest
+      src_varname: 'liquid_precipitation'
+      zlib: True
+    - name: ice_precipitation
+      dtype: int32
+      nodata: 9999
+      units: '0.10 mm/h'
+      resampling_method: nearest
+      src_varname: 'ice_precipitation'
+      zlib: True
+    - name: percent_liquid
+      dtype: uint8
+      nodata: 9999
+      units: 'percent'
+      resampling_method: nearest
+      src_varname: 'percent_liquid'
+      zlib: True
