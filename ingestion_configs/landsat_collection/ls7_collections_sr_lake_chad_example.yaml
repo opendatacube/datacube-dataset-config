@@ -36,8 +36,8 @@ storage:
 
   crs: EPSG:4326
   tile_size:
-          longitude: 0.30048646253814
-          latitude:  0.30048646253814
+          longitude: 0.269494585236
+          latitude:  0.269494585236
   resolution:
           longitude: 0.000269494585236
           latitude: -0.000269494585236
