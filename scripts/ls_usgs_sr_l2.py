@@ -1,9 +1,7 @@
-# coding=utf-8
+#!/usr/bin/env python3
 """
 Ingest data from the command-line.
 """
-from __future__ import absolute_import, division
-
 import logging
 import uuid
 from xml.etree import ElementTree
