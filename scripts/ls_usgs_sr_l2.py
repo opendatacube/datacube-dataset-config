@@ -11,7 +11,6 @@ import rasterio.warp
 import click
 from osgeo import osr
 import os
-from pathlib import Path
 # image boundary imports
 import rasterio
 from rasterio.errors import RasterioIOError
@@ -127,8 +126,8 @@ def satellite_ref(sat):
     return r
 
 
-def get_projection(realpath, path):
-    with rasterio.open(os.path.join(str(realpath), str(path))) as img:
+def get_projection(fname):
+    with rasterio.open(fname, 'r') as img:
         left, bottom, right, top = img.bounds
         spatial_reference = str(str(getattr(img, 'crs_wkt', None) or img.crs.wkt))
         geo_ref_points = {
@@ -152,8 +151,10 @@ def get_coords(geo_ref_points, spatial_ref):
 
 
 def prep_dataset(path, metadata):
+    assert isinstance(path, str)
+    assert isinstance(metadata, str)
 
-    with open(os.path.join(str(path), metadata)) as f:
+    with open(os.path.join(path, metadata)) as f:
         xmlstring = f.read()
     xmlstring = re.sub(r'\sxmlns="[^"]+"', '', xmlstring, count=1)
     doc = ElementTree.fromstring(xmlstring)
@@ -176,10 +177,10 @@ def prep_dataset(path, metadata):
     # prune to only include files that are present on disk
     image_files = {k: file
                    for k, file in image_files.items()
-                   if (Path(path)/file).exists()}
+                   if os.path.exists(os.path.join(path, file))}
 
     sample_file = image_files['blue']
-    geo_ref_points, spatial_ref = get_projection(path, sample_file)
+    geo_ref_points, spatial_ref = get_projection(os.path.join(path, sample_file))
     doc = {
         'id': str(uuid.uuid4()),
         'processing_level': str(level),
