@@ -4,23 +4,23 @@ Ingest data from the command-line.
 """
 from __future__ import absolute_import
 
-import uuid
 import logging
-from xml.etree import ElementTree
-from pathlib import Path
-import yaml
-import click
-from osgeo import osr
 import os
-# image boundary imports
+import uuid
+from pathlib import Path
+from xml.etree import ElementTree
 
-from rasterio import crs
-from rasterio.errors import RasterioIOError
+import click
 import rasterio.features
 import shapely.affinity
 import shapely.geometry
 import shapely.ops
-from scipy import ndimage
+import yaml
+from osgeo import osr
+from rasterio.errors import RasterioIOError
+
+
+# image boundary imports
 
 
 # IMAGE BOUNDARY CODE
@@ -114,13 +114,12 @@ def get_coords(geo_ref_points, spatial_ref):
 
 
 def prepare_dataset(path):
-
     root = ElementTree.parse(str(path)).getroot()
     level = root.findall('./*/Product_Info/PROCESSING_LEVEL')[0].text
     product_type = root.findall('./*/Product_Info/PRODUCT_TYPE')[0].text
     ct_time = root.findall('./*/Product_Info/GENERATION_TIME')[0].text
-    print(level,product_type,ct_time)
-    #granuleslist = [(granule.get('granuleIdentifier'), [imid.text for imid in granule.findall('IMAGE_FILE')]) for
+    print(level, product_type, ct_time)
+    # granuleslist = [(granule.get('granuleIdentifier'), [imid.text for imid in granule.findall('IMAGE_FILE')]) for
     #                granule in
     #                root.findall('./*/Product_Info/Product_Organisation/Granule_List/Granules')]
     # Assume multiple granules
@@ -137,14 +136,13 @@ def prepare_dataset(path):
             granules = {granule.get('granuleIdentifier'): [imid.text for imid in granule.findall('IMAGE_ID')]
                         for granule in root.findall('./*/Product_Info/Product_Organisation/Granule_List/Granule')}
             single_granule_archive = False
-    
 
-    #current = 0
-    #list = []
-    #granules = {}
-    #for i in granuleslist:
+    # current = 0
+    # list = []
+    # granules = {}
+    # for i in granuleslist:
     #    granules[i[0]] = {}
-    #for key in granules.keys():
+    # for key in granules.keys():
 
     #    granulecontent = []
     #    for j in granuleslist:
@@ -160,34 +158,34 @@ def prepare_dataset(path):
         images_twenty_list = []
         images_sixty_list = []
         images_classification = []
-        #gran_path = str(path.parent.joinpath('GRANULE', granule_id, granule_id[:-7].replace('MSI', 'MTD') + '.xml'))
+        # gran_path = str(path.parent.joinpath('GRANULE', granule_id, granule_id[:-7].replace('MSI', 'MTD') + '.xml'))
         img_data_path = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA'))
-        
+
         gran_path = str(path.parent.joinpath('GRANULE', granule_id, granule_id[:-7].replace('MSI', 'MTD') + '.xml'))
         if not Path(gran_path).exists():
             gran_path = str(path.parent.joinpath(images[0]))
-            gran_path = str(Path(gran_path).parents[2].joinpath('MTD_TL.xml')) 
+            gran_path = str(Path(gran_path).parents[2].joinpath('MTD_TL.xml'))
         root = ElementTree.parse(gran_path).getroot()
-            
+
         if not Path(img_data_path).exists():
-            #img_data_path = str(Path(gran_path).parents[0].joinpath('IMG_DATA'))
+            # img_data_path = str(Path(gran_path).parents[0].joinpath('IMG_DATA'))
             img_data_path = str(Path(path).parent)
-            
+
         if single_granule_archive is False:
             img_data_path = img_data_path + str(Path('GRANULE').joinpath(granule_id, 'IMG_DATA'))
-        
+
         root = ElementTree.parse(gran_path).getroot()
         sensing_time = root.findall('./*/SENSING_TIME')[0].text
-        #img_data_path = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA'))
-        #img_data_path_r10 = str(Path(img_data_path).joinpath('R10m'))
-        #img_data_path_r20 = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA', 'R20m'))
-        #img_data_path_r60 = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA', 'R60m'))
+        # img_data_path = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA'))
+        # img_data_path_r10 = str(Path(img_data_path).joinpath('R10m'))
+        # img_data_path_r20 = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA', 'R20m'))
+        # img_data_path_r60 = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA', 'R60m'))
 
         for image in images:
-            #print('IMAGE',image)
-            #print('img_data_path', img_data_path)
-            #image = str(Path(image).name)
-            #print('IMAGE',image)
+            # print('IMAGE',image)
+            # print('img_data_path', img_data_path)
+            # image = str(Path(image).name)
+            # print('IMAGE',image)
             classification_list = ['SCL']
             ten_list = ['B02_10m', 'B03_10m', 'B04_10m', 'B08_10m']
             twenty_list = ['B05_20m', 'B06_20m', 'B07_20m', 'B11_20m', 'B12_20m', 'B8A_20m',
@@ -279,10 +277,10 @@ def main(datasets, output):
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
 
     for dataset in datasets:
-        
+
         path = Path(dataset).absolute()
         if path.is_dir():
-            #path = Path(path.joinpath(path.stem.replace('PRD_MSIL2A', 'MTD_SAFL2A') + '.xml'))
+            # path = Path(path.joinpath(path.stem.replace('PRD_MSIL2A', 'MTD_SAFL2A') + '.xml'))
             for file in os.listdir(path):
                 if file.endswith(".xml"):
                     if file.startswith("MTD"):
@@ -297,7 +295,7 @@ def main(datasets, output):
         output_path = Path(output)
         if 'xml' in str(path):
             yaml_path = output_path.joinpath(path.parent.name + '.yaml')
-        else:                  
+        else:
             yaml_path = output_path.joinpath(path.name + '.yaml')
 
         if documents:

@@ -125,7 +125,6 @@ def get_coords(geo_ref_points, spatial_ref):
 
 
 def prepare_dataset(path):
-    
     """
     Returns yaml content based on content found at input file path
     """
@@ -151,14 +150,15 @@ def prepare_dataset(path):
         size_bytes = os.path.getsize(str(path))
     else:
         # find the auxilliary metadata
-        datastrip_auxilliary = [s for s in glob.glob(str(Path(path).parent)+ '/**/*.xml', recursive=True) if "DATASTRIP" in s]
-        
+        datastrip_auxilliary = [s for s in glob.glob(str(Path(path).parent) + '/**/*.xml', recursive=True) if
+                                "DATASTRIP" in s]
+
         for i in datastrip_auxilliary:
             if 'DATASTRIP' in i:
                 datastrip_metadata = i
         root = ElementTree.parse(str(path)).getroot()
         if os.path.isdir(path):
-            size_bytes = os.path.getsize(str(path))  
+            size_bytes = os.path.getsize(str(path))
         else:
             checksum_sha1 = hashlib.sha1(open(str(path), 'rb').read()).hexdigest()
             size_bytes = os.path.getsize(str(os.path.abspath(os.path.join(path, os.pardir))))
@@ -198,10 +198,14 @@ def prepare_dataset(path):
     degraded_msi_data_percentage = root.findall('./*/Technical_Quality_Assessment/DEGRADED_MSI_DATA_PERCENTAGE')[0].text
     try:
         sensor_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/SENSOR_QUALITY_FLAG')[0].text
-        general_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/GENERAL_QUALITY_FLAG')[0].text
-        geometric_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/GEOMETRIC_QUALITY_FLAG')[0].text
-        format_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/FORMAT_CORRECTNESS_FLAG')[0].text
-        radiometric_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/RADIOMETRIC_QUALITY_FLAG')[0].text
+        general_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/GENERAL_QUALITY_FLAG')[
+            0].text
+        geometric_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/GEOMETRIC_QUALITY_FLAG')[
+            0].text
+        format_quality_flag = root.findall('./*/Quality_Control_Checks/Quality_Inspections/FORMAT_CORRECTNESS_FLAG')[
+            0].text
+        radiometric_quality_flag = \
+        root.findall('./*/Quality_Control_Checks/Quality_Inspections/RADIOMETRIC_QUALITY_FLAG')[0].text
     except:
         sensor_quality_flag = ""
         general_quality_flag = ""
@@ -229,22 +233,22 @@ def prepare_dataset(path):
         images_sixty_list = []
         # Not required for Zip method - uses granule metadata
         img_data_path = str(path.parent.joinpath('GRANULE', granule_id, 'IMG_DATA'))
-        
+
         if not path.suffix == '.zip':
-            
+
             gran_path = str(path.parent.joinpath('GRANULE', granule_id, granule_id[:-7].replace('MSI', 'MTD') + '.xml'))
             if not Path(gran_path).exists():
                 gran_path = str(path.parent.joinpath(images[0]))
-                gran_path = str(Path(gran_path).parents[1].joinpath('MTD_TL.xml')) 
+                gran_path = str(Path(gran_path).parents[1].joinpath('MTD_TL.xml'))
             root = ElementTree.parse(gran_path).getroot()
-            
+
             if not Path(img_data_path).exists():
-                #img_data_path = str(Path(gran_path).parents[0].joinpath('IMG_DATA'))
+                # img_data_path = str(Path(gran_path).parents[0].joinpath('IMG_DATA'))
                 img_data_path = str(Path(path).parent)
-            
+
             if single_granule_archive is False:
-                img_data_path = img_data_path# + str(Path('GRANULE').joinpath(granule_id, 'IMG_DATA'))
-   
+                img_data_path = img_data_path  # + str(Path('GRANULE').joinpath(granule_id, 'IMG_DATA'))
+
         else:
             xmlzipfiles = [s for s in z.namelist() if 'MTD_TL.xml' in s]
             if xmlzipfiles == []:
@@ -258,7 +262,7 @@ def prepare_dataset(path):
             # for earlier versions of zip archive - use GRANULES
             if single_granule_archive is False:
                 img_data_path = img_data_path + str(Path('GRANULE').joinpath(granule_id, 'IMG_DATA'))
-        
+
         sensing_time = root.findall('./*/SENSING_TIME')[0].text
         # Add the QA band
         qi_band = root.findall('./*/PVI_FILENAME')[0].text
@@ -277,7 +281,7 @@ def prepare_dataset(path):
             for item in sixty_list:
                 if item in image:
                     images_sixty_list.append(os.path.join(img_data_path, image + ".jp2"))
-        
+
         tile_id = root.findall('./*/TILE_ID')[0].text
         mgrs_reference = tile_id.split('_')[9]
         datastrip_id = root.findall('./*/DATASTRIP_ID')[0].text
@@ -415,7 +419,8 @@ def main(output, datasets, checksum, date):
         (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(dataset)
         create_date = datetime.utcfromtimestamp(ctime)
         if create_date <= date:
-            logging.info("Dataset creation time "+str(create_date)+" is older than start date "+str(date)+"...SKIPPING")
+            logging.info(
+                "Dataset creation time " + str(create_date) + " is older than start date " + str(date) + "...SKIPPING")
         else:
             path = Path(dataset).absolute()
             if path.is_dir():
@@ -423,16 +428,16 @@ def main(output, datasets, checksum, date):
                     if file.endswith(".xml"):
                         if "MTD" in file:
                             path = Path(os.path.join(path, file))
-                            
+
             if path.suffix not in ['.xml', '.zip']:
                 raise RuntimeError('want xml or zipped archive')
             logging.info("Processing %s", path)
             output_path = Path(output)
             if 'xml' in str(path):
                 yaml_path = output_path.joinpath(path.parent.name + '.yaml')
-            else:                  
+            else:
                 yaml_path = output_path.joinpath(path.name + '.yaml')
-            
+
             logging.info("Output %s", yaml_path)
             if os.path.exists(str(yaml_path)):
                 logging.info("Output already exists %s", yaml_path)

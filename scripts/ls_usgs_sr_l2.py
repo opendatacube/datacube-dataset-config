@@ -3,21 +3,22 @@
 Ingest data from the command-line.
 """
 import logging
+import os
+import re
 import uuid
 from xml.etree import ElementTree
-import re
-import yaml
-import rasterio.warp
+
 import click
-from osgeo import osr
-import os
 # image boundary imports
 import rasterio
-from rasterio.errors import RasterioIOError
 import rasterio.features
+import rasterio.warp
 import shapely.affinity
 import shapely.geometry
 import shapely.ops
+import yaml
+from osgeo import osr
+from rasterio.errors import RasterioIOError
 
 ls8_images = {
     'sr_band1': 'coastal_aerosol',
