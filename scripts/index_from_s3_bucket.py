@@ -20,6 +20,7 @@ from ruamel.yaml import YAML
 
 from multiprocessing import Process, current_process, Queue, Manager, cpu_count
 from time import sleep, time
+from queue import Empty
 
 GUARDIAN = "GUARDIAN_QUEUE_EMPTY"
 AWS_PDS_TXT_SUFFIX = "MTL.txt"
@@ -184,7 +185,8 @@ def get_s3_url(bucket_name, obj_key):
     return 's3://{bucket_name}/{obj_key}'.format(
         bucket_name=bucket_name, obj_key=obj_key)
 
-def archive_dataset(doc, uri, index, sources_policy):
+
+def archive_document(doc, uri, index, sources_policy):
     def get_ids(dataset):
         ds = index.datasets.get(dataset.id, include_sources=True)
         for source in ds.sources.values():
@@ -221,25 +223,29 @@ def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, qu
     safety = 'safe' if not unsafe else 'unsafe'
 
     while True:
-        key = queue.get(timeout=60)
-        if key == GUARDIAN:
+        try:
+            key = queue.get(timeout=60)
+            if key == GUARDIAN:
+                queue.task_done()
+                break
+            logging.info("Processing %s %s", key, current_process())
+            obj = s3.Object(bucket_name, key).get(ResponseCacheControl='no-cache')
+            raw = obj['Body'].read()
+            if suffix == AWS_PDS_TXT_SUFFIX:
+                # Attempt to process text document
+                raw_string = raw.decode('utf8')
+                txt_doc = _parse_group(iter(raw_string.split("\n")))['L1_METADATA_FILE']
+                data = make_metadata_doc(txt_doc, bucket_name, key)
+            else:
+                yaml = YAML(typ=safety, pure=False)
+                yaml.default_flow_style = False
+                data = yaml.load(raw)
+            uri= get_s3_url(bucket_name, key)
+            logging.info("calling %s", func)
+            func(data, uri, index, sources_policy)
+            queue.task_done()
+        except Empty:
             break
-        logging.info("Processing %s %s", key, current_process())
-        obj = s3.Object(bucket_name, key).get(ResponseCacheControl='no-cache')
-        raw = obj['Body'].read()
-        if suffix == AWS_PDS_TXT_SUFFIX:
-            # Attempt to process text document
-            raw_string = raw.decode('utf8')
-            txt_doc = _parse_group(iter(raw_string.split("\n")))['L1_METADATA_FILE']
-            data = make_metadata_doc(txt_doc, bucket_name, key)
-        else:
-            yaml = YAML(typ=safety, pure=False)
-            yaml.default_flow_style = False
-            data = yaml.load(raw)
-        uri= get_s3_url(bucket_name, key)
-        logging.info("calling %s", func)
-        func(data, uri, index, sources_policy)
-        queue.task_done()
 
 
 def iterate_datasets(bucket_name, config, prefix, suffix, func, unsafe, sources_policy):
@@ -283,7 +289,7 @@ def iterate_datasets(bucket_name, config, prefix, suffix, func, unsafe, sources_
 @click.option('--sources_policy', default="verify", help="verify, ensure, skip")
 def main(bucket_name, config, prefix, suffix, archive, unsafe, sources_policy):
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
-    action = archive_dataset if archive else add_dataset
+    action = archive_document if archive else add_dataset
     iterate_datasets(bucket_name, config, prefix, suffix, action, unsafe, sources_policy)
    
 
