@@ -214,7 +214,7 @@ def add_dataset(doc, uri, index, sources_policy):
             err = e
             logging.error("Unhandled exception %s", e)
 
-    return err
+    return dataset, err
 
 def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, queue):
     dc=datacube.Datacube(config=config)
