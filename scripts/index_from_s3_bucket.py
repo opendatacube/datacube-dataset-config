@@ -193,7 +193,6 @@ def archive_document(doc, uri, index, sources_policy):
             yield source.id
         yield dataset.id
 
-
     resolver = Doc2Dataset(index)
     dataset, err  = resolver(doc, uri)
     index.datasets.archive(get_ids(dataset))
@@ -206,15 +205,16 @@ def add_dataset(doc, uri, index, sources_policy):
     dataset, err  = resolver(doc, uri)
     if err is not None:
         logging.error("%s", err)
-    try:
-        index.datasets.add(dataset, sources_policy=sources_policy) # Source policy to be checked in sentinel 2 datase types
-    except changes.DocumentMismatchError as e:
-        index.datasets.update(dataset, {tuple(): changes.allow_any})
-    except Exception as e:
-        logging.error("Unhandled exception %s", e)
+    else:
+        try:
+            index.datasets.add(dataset, sources_policy=sources_policy) # Source policy to be checked in sentinel 2 datase types
+        except changes.DocumentMismatchError as e:
+            index.datasets.update(dataset, {tuple(): changes.allow_any})
+        except Exception as e:
+            err = e
+            logging.error("Unhandled exception %s", e)
 
-    return uri
-
+    return err
 
 def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, queue):
     dc=datacube.Datacube(config=config)
@@ -226,7 +226,6 @@ def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, qu
         try:
             key = queue.get(timeout=60)
             if key == GUARDIAN:
-                queue.task_done()
                 break
             logging.info("Processing %s %s", key, current_process())
             obj = s3.Object(bucket_name, key).get(ResponseCacheControl='no-cache')
@@ -245,6 +244,8 @@ def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, qu
             func(data, uri, index, sources_policy)
             queue.task_done()
         except Empty:
+            break
+        except EOFError:
             break
 
 
@@ -267,8 +268,6 @@ def iterate_datasets(bucket_name, config, prefix, suffix, func, unsafe, sources_
     for obj in bucket.objects.filter(Prefix = str(prefix)):
         if (obj.key.endswith(suffix)):
             queue.put(obj.key)
-
-    queue.join()
 
     for i in range(worker_count):
         queue.put(GUARDIAN)
