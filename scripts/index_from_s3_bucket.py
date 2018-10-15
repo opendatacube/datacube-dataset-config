@@ -201,7 +201,7 @@ def archive_document(doc, uri, index, sources_policy):
 
 def add_dataset(doc, uri, index, sources_policy):
     logging.info("Indexing %s", uri)
-    resolver = Doc2Dataset(index)
+    resolver = Doc2Dataset(index, exclude_products="ls8_barest_earth_mosaic")
     dataset, err  = resolver(doc, uri)
     if err is not None:
         logging.error("%s", err)
