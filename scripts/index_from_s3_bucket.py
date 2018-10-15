@@ -1,30 +1,21 @@
-
 # coding: utf-8
-from xml.etree import ElementTree
-from pathlib import Path
-import os
-from osgeo import osr
-import dateutil
-from dateutil import parser
-from datetime import timedelta
-import uuid
-import yaml
 import logging
-import click
 import re
+import uuid
+from multiprocessing import Process, current_process, Manager, cpu_count
+from queue import Empty
+
 import boto3
+import click
+from osgeo import osr
+from ruamel.yaml import YAML
+
 import datacube
 from datacube.index.hl import Doc2Dataset
 from datacube.utils import changes
-from ruamel.yaml import YAML
-
-from multiprocessing import Process, current_process, Queue, Manager, cpu_count
-from time import sleep, time
-from queue import Empty
 
 GUARDIAN = "GUARDIAN_QUEUE_EMPTY"
 AWS_PDS_TXT_SUFFIX = "MTL.txt"
-
 
 MTL_PAIRS_RE = re.compile(r'(\w+)\s=\s(.*)')
 
@@ -120,7 +111,7 @@ def get_s3_url(bucket_name, obj_key):
 def absolutify_paths(doc, bucket_name, obj_key):
     objt_key = format_obj_key(obj_key)
     for band in doc['image']['bands'].values():
-        band['path'] = get_s3_url(bucket_name, objt_key + '/'+band['path'])
+        band['path'] = get_s3_url(bucket_name, objt_key + '/' + band['path'])
     return doc
 
 
@@ -154,14 +145,14 @@ def make_metadata_doc(mtl_data, bucket_name, object_key):
             'to_dt': sensing_time,
             'center_dt': sensing_time,
             'coord': coordinates,
-                  },
+        },
         'format': {'name': 'GeoTiff'},
         'grid_spatial': {
             'projection': {
                 'geo_ref_points': geo_ref_points,
                 'spatial_reference': 'EPSG:%s' % cs_code,
-                            }
-                        },
+            }
+        },
         'image': {
             'bands': {
                 band[1]: {
@@ -177,7 +168,7 @@ def make_metadata_doc(mtl_data, bucket_name, object_key):
 
 
 def format_obj_key(obj_key):
-    obj_key ='/'.join(obj_key.split("/")[:-1])
+    obj_key = '/'.join(obj_key.split("/")[:-1])
     return obj_key
 
 
@@ -194,7 +185,7 @@ def archive_document(doc, uri, index, sources_policy):
         yield dataset.id
 
     resolver = Doc2Dataset(index)
-    dataset, err  = resolver(doc, uri)
+    dataset, err = resolver(doc, uri)
     index.datasets.archive(get_ids(dataset))
     logging.info("Archiving %s and all sources of %s", dataset.id, dataset.id)
 
@@ -202,12 +193,13 @@ def archive_document(doc, uri, index, sources_policy):
 def add_dataset(doc, uri, index, sources_policy):
     logging.info("Indexing %s", uri)
     resolver = Doc2Dataset(index)
-    dataset, err  = resolver(doc, uri)
+    dataset, err = resolver(doc, uri)
     if err is not None:
         logging.error("%s", err)
     else:
         try:
-            index.datasets.add(dataset, sources_policy=sources_policy) # Source policy to be checked in sentinel 2 datase types
+            index.datasets.add(dataset,
+                               sources_policy=sources_policy)  # Source policy to be checked in sentinel 2 datase types
         except changes.DocumentMismatchError as e:
             index.datasets.update(dataset, {tuple(): changes.allow_any})
         except Exception as e:
@@ -216,8 +208,9 @@ def add_dataset(doc, uri, index, sources_policy):
 
     return dataset, err
 
+
 def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, queue):
-    dc=datacube.Datacube(config=config)
+    dc = datacube.Datacube(config=config)
     index = dc.index
     s3 = boto3.resource("s3")
     safety = 'safe' if not unsafe else 'unsafe'
@@ -239,7 +232,7 @@ def worker(config, bucket_name, prefix, suffix, func, unsafe, sources_policy, qu
                 yaml = YAML(typ=safety, pure=False)
                 yaml.default_flow_style = False
                 data = yaml.load(raw)
-            uri= get_s3_url(bucket_name, key)
+            uri = get_s3_url(bucket_name, key)
             logging.info("calling %s", func)
             func(data, uri, index, sources_policy)
             queue.task_done()
@@ -265,8 +258,8 @@ def iterate_datasets(bucket_name, config, prefix, suffix, func, unsafe, sources_
         processess.append(proc)
         proc.start()
 
-    for obj in bucket.objects.filter(Prefix = str(prefix)):
-        if (obj.key.endswith(suffix)):
+    for obj in bucket.objects.filter(Prefix=str(prefix)):
+        if obj.key.endswith(suffix):
             queue.put(obj.key)
 
     for i in range(worker_count):
@@ -276,23 +269,23 @@ def iterate_datasets(bucket_name, config, prefix, suffix, func, unsafe, sources_
         proc.join()
 
 
-
-@click.command(help= "Enter Bucket name. Optional to enter configuration file to access a different database")
+@click.command(help="Enter Bucket name. Optional to enter configuration file to access a different database")
 @click.argument('bucket_name')
-@click.option('--config','-c',help=" Pass the configuration file to access the database",
-        type=click.Path(exists=True))
+@click.option('--config', '-c', help=" Pass the configuration file to access the database",
+              type=click.Path(exists=True))
 @click.option('--prefix', '-p', help="Pass the prefix of the object to the bucket")
-@click.option('--suffix', '-s', default=".yaml", help="Defines the suffix of the metadata_docs that will be used to load datasets. For AWS PDS bucket use MTL.txt")
-@click.option('--archive', is_flag=True, help="If true, datasets found in the specified bucket and prefix will be archived")
-@click.option('--unsafe', is_flag=True, help="If true, YAML will be parsed unsafely. Only use on trusted datasets. Only valid if suffix is yaml")
+@click.option('--suffix', '-s', default=".yaml",
+              help="Defines the suffix of the metadata_docs that will be used to load datasets. For AWS PDS bucket use MTL.txt")
+@click.option('--archive', is_flag=True,
+              help="If true, datasets found in the specified bucket and prefix will be archived")
+@click.option('--unsafe', is_flag=True,
+              help="If true, YAML will be parsed unsafely. Only use on trusted datasets. Only valid if suffix is yaml")
 @click.option('--sources_policy', default="verify", help="verify, ensure, skip")
 def main(bucket_name, config, prefix, suffix, archive, unsafe, sources_policy):
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
     action = archive_document if archive else add_dataset
     iterate_datasets(bucket_name, config, prefix, suffix, action, unsafe, sources_policy)
-   
+
 
 if __name__ == "__main__":
     main()
-
-
