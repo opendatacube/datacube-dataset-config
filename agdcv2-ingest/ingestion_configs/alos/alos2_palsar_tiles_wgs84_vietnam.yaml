@@ -1,0 +1,93 @@
+source_type: alos2_palsar_tile
+output_type: alos2_palsar_vietnam
+
+description: ALOS2 PALSAR tile in DN format processed for the Data Cube
+
+location: '/datacube/ingested_data/ALOS2_PALSAR/'
+file_path_template: 'Vietnam/ALOS2_PALSAR_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+global_attributes:
+  title: CEOS SEO Data Cube ALOS2 PALSAR Gamma0
+  summary: ALOS2 PALSAR data derived from standard JAXA mosaic data.
+  history: This data represents a tile and reprojection of ALOS2 PALSAR data.
+  institution: JAXA
+  instrument: PALSAR
+  cdm_data_type: Grid
+  keywords: AU/GA,ESA,SAR,EARTH SCIENCE
+  keywords_vocabulary: GCMD
+  platform: ALOS2
+  processing_level: L2
+  product_version: '1.0.0'
+  product_suite: ALOS2
+  project: AGDC
+  publisher_email: Australian-Geoscience-Data-Cube@ga.gov.au
+  publisher_name: AGDC Programme Director
+  publisher_url: www.ga.gov.au
+  coverage_content_type: physicalMeasurement
+  license: https://creativecommons.org/licenses/by/4.0/
+  naming_authority: au.gov.ga
+  acknowledgment: Sentinel-1 data is provided by the European Space Agency on behalf of the European Commission via download.
+
+ingestion_bounds:
+  left: 100.0
+  bottom: 5.0
+  right: 115.0
+  top: 20.0
+
+storage:
+  driver: NetCDF CF
+
+  crs: EPSG:4326
+  tile_size:
+          longitude: 0.666666666666
+          latitude: 0.666666666666
+  resolution:
+          longitude: 0.000222222222222
+          latitude: -0.000222222222222
+  chunking:
+      longitude: 500
+      latitude: 500
+      time: 1
+  dimension_order: ['time', 'latitude', 'longitude']
+
+fuse_data: copy
+
+measurements:
+    - name: hh
+      dtype: int16
+      nodata: 0
+      units: 'DN'
+      resampling_method: nearest
+      src_varname: 'hh_gamma0'
+      zlib: True
+      attrs:
+          alias: "HH"
+    - name: hv
+      dtype: int16
+      nodata: 0
+      units: 'DN'
+      resampling_method: nearest
+      src_varname: 'hv_gamma0'
+      zlib: True
+      attrs:
+          alias: "HV"
+    - name: date
+      dtype: int16
+      nodata: 0
+      units: '1'
+      resampling_method: nearest
+      src_varname: 'observation_date'
+      zlib: True
+    - name: incidence_angle
+      dtype: uint8
+      nodata: 0
+      units: '1'
+      resampling_method: nearest
+      src_varname: 'incidence_angle'
+      zlib: True
+    - name: mask
+      dtype: uint8
+      nodata: 0
+      units: '1'
+      resampling_method: nearest
+      src_varname: 'mask'
+      zlib: True

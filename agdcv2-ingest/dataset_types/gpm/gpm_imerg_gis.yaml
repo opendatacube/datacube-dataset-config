@@ -1,0 +1,96 @@
+name: gpm_imerg_gis_monthly
+description: GIS translation of the imerg data product. Multi satellite, global, precipitation estimate. Downloaded from ftp://arthurhou.pps.eosdis.nasa.gov/gpmdata/. Rate measured over one month.
+metadata_type: eo
+
+metadata:
+  format: {name: GeoTiff}
+  instrument: {name: GPM}
+  platform: {code: GPM}
+  product_type: monthly
+
+measurements:
+- name: total_precipitation
+  units: '0.001 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: liquid_precipitation
+  units: '0.001 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: ice_precipitation
+  units: '0.001 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: percent_liquid
+  units: 'percent'
+  dtype: uint8
+  nodata: 255
+
+---
+
+name: gpm_imerg_gis_daily
+description: GIS translation of the imerg data product. Multi satellite, global, precipitation estimate. Downloaded from ftp://arthurhou.pps.eosdis.nasa.gov/gpmdata/. Rate measured over one day.
+metadata_type: eo
+
+metadata:
+  format: {name: GeoTiff}
+  instrument: {name: GPM}
+  platform: {code: GPM}
+  product_type: daily
+
+measurements:
+- name: total_precipitation
+  units: '0.10 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: liquid_precipitation
+  units: '0.10 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: ice_precipitation
+  units: '0.10 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: percent_liquid
+  units: 'percent'
+  dtype: uint8
+  nodata: 255
+
+---
+
+name: gpm_imerg_gis_hourly
+description: GIS translation of the imerg data product. Multi satellite, global, precipitation estimate. Downloaded from ftp://arthurhou.pps.eosdis.nasa.gov/gpmdata/. Rate measured over 30 minutes.
+metadata_type: eo
+
+metadata:
+  format: {name: GeoTiff}
+  instrument: {name: GPM}
+  platform: {code: GPM}
+  product_type: hourly
+
+measurements:
+- name: total_precipitation
+  units: '0.10 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: liquid_precipitation
+  units: '0.10 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: ice_precipitation
+  units: '0.10 mm/h'
+  dtype: uint16
+  nodata: 9999
+
+- name: percent_liquid
+  units: 'percent'
+  dtype: uint8
+  nodata: 255

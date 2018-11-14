@@ -1,0 +1,20 @@
+name: s1_gamma0_scene
+description: Sentinel-1A/B SAR Gamma0 scenes, processed to the CEOS ARD standard - Orbit updates, GRD border noise, thermal noise, radiometric calibration and terrain correction, orthorectification.
+metadata_type: eo
+
+metadata:
+  format: {name: ENVI}
+  instrument: {name: SAR}
+  platform: {code: SENTINEL_1}
+  product_type: gamma0
+
+measurements:
+- name: vh
+  units: 'DN'
+  dtype: float32
+  nodata: 0
+
+- name: vv
+  units: 'DN'
+  dtype: float32
+  nodata: 0

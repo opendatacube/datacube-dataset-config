@@ -1,0 +1,98 @@
+source_type: ls7_ledaps_mosaic_scene
+output_type: LS7_ETM_LEDAPS_MOSAIC
+
+description: Landsat 7 LEDAPS 30 meters, near 0.94 degrees tile, WGS84 Projection (EPSG:4326), median pixel yearly mosaic.
+
+location: '/dc_storage'
+file_path_template: 'LS7_ETM_LEDAPS_MOSAIC/LS7_ETM_LEDAPS_4326_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+global_attributes:
+  title: CEOS Data Cube Landsat Surface Reflectance
+  summary: Landsat 7 Enhanced Thematic Mapper Plus Analysis Ready data prepared by NASA on behalf of CEOS.
+  source: Surface reflectance from LEDAPS
+  institution: IDEAM
+  instrument: ETM
+  cdm_data_type: Grid
+  keywords: AU/GA,NASA/GSFC/SED/ESD/LANDSAT,REFLECTANCE,ETM+,TM,OLI,EARTH SCIENCE
+  keywords_vocabulary: GCMD
+  platform: LANDSAT-7
+  processing_level: L2
+  product_version: '2.0.0'
+  product_suite: USGS Landsat
+  project: CEOS
+  coverage_content_type: physicalMeasurement
+  references: http://dx.doi.org/10.3334/ORNLDAAC/1146
+  license: https://creativecommons.org/licenses/by/4.0/
+  naming_authority: gov.usgs
+  acknowledgment: Landsat data is provided by the United States Geological Survey (USGS).
+
+# These are the actual extents of your ingestion region. In your email, you have specified
+# the bounds found below.
+ingestion_bounds: # Specified in Storage CRS coordinates. Will expand to tile boundaries.
+  left: -82
+  bottom: -5
+  right: -66
+  top: 14
+
+storage:
+  driver: NetCDF CF
+
+  crs: EPSG:4326
+  # Using the values for resolution below, select a tile size that is evenly divisible by the resolution.
+  # You can do this however you want, I normally just multiply by 3500. This would yield a 3500 pixel tile size.
+  tile_size:
+          latitude:  0.949557
+          longitude: 0.9449825
+  # Find the length of a degree using this url: http://msi.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html
+  # Use the midpoint of the min/max latitudes in the ingestion bounds. In this case, use 3.5
+  # For latitude/longitude length in meters, do: 30 / length in meters to find resolution.
+  # Round to 9 decimal places if necessary.
+  resolution:
+          # At 3.5 latitude, one degree of latitude=110578m. 30/110578 = 0.0002713017 -> round to 0.000271302
+          latitude: -0.000271302
+          # At 3.5 latitude, one degree of longitude=111113m. 30/111113 = 0.00026999541 -> round to 0.000269995
+          longitude: 0.000269995
+  chunking:
+      latitude: 200
+      longitude: 200
+      time: 1
+  dimension_order: ['time', 'latitude', 'longitude']
+
+fuse_data: copy
+
+measurements:
+    - name: red
+      dtype: int16
+      nodata: -9999
+      resampling_method: nearest
+      src_varname: 'sr_band3'
+      zlib: True
+      attrs:
+          long_name: "Surface Reflectance 0.63-0.69 microns (Red)"
+          alias: "band_3"
+    - name: nir
+      dtype: int16
+      nodata: -9999
+      resampling_method: nearest
+      src_varname: 'sr_band4'
+      zlib: True
+      attrs:
+          long_name: "Surface Reflectance 0.76-0.90 microns (Near Infrared)"
+          alias: "band_4"
+    - name: swir1
+      dtype: int16
+      nodata: -9999
+      resampling_method: nearest
+      src_varname: 'sr_band5'
+      zlib: True
+      attrs:
+          long_name: "Surface Reflectance 1.55-1.75 microns (Short-wave Infrared)"
+          alias: "band_5"
+    - name: swir2
+      dtype: int16
+      nodata: -9999
+      resampling_method: nearest
+      src_varname: 'sr_band7'
+      zlib: True
+      attrs:
+          long_name: "Surface Reflectance 2.08-2.35 microns (Short-wave Infrared)"
+          alias: "band_7"

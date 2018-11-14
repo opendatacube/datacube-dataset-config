@@ -1,0 +1,135 @@
+name: ls8_collections_sr_scene
+description: Landsat 8 USGS Collection 1 Higher Level SR scene proessed using LaSRC. 30m UTM based projection.
+metadata_type: eo
+
+metadata:
+    platform:
+        code: LANDSAT_8
+    instrument:
+        name: OLI_TIRS
+    product_type: LaSRC
+    format:
+        name: GeoTiff
+
+measurements:
+    - name: 'sr_band1'
+      aliases: [band_1, coastal_aerosol]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band2'
+      aliases: [band_2, blue]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band3'
+      aliases: [band_3, green]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band4'
+      aliases: [band_4, red]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band5'
+      aliases: [band_5, nir]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band6'
+      aliases: [band_6, swir1]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'sr_band7'
+      aliases: [band_7, swir2]
+      dtype: int16
+      nodata: -9999
+      units: 'reflectance'
+    - name: 'pixel_qa'
+      aliases: [pixel_qa]
+      dtype: uint16
+      nodata: 1
+      units: 'bit_index'
+      flags_definition:
+        pixel_qa:
+          bits: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+          description: Level 2 Pixel Quality Band
+          values:
+            1: Fill
+            2: Clear
+            4: Water
+            8: Cloud shadow
+            16: Snow
+            32: Cloud
+            64: Cloud Confidence Low Bit
+            128: Cloud Confidence High Bit
+            256: Cirrus Confidence Low Bit
+            512: Cirrus Confidence High Bit
+            1024: Unused
+            2048: Unused
+            4096: Unused
+            8192: Unused
+            16384: Unused
+            32786: Unused
+    - name: 'sr_aerosol'
+      aliases: [sr_aerosol_qa, aerosol_qa, aerosol]
+      dtype: uint8
+      nodata: 0
+      units: 'bit_index'
+      flags_definition:
+        aerosol_qa:
+          bits: [0,1,2,3,4,5,6,7]
+          description: Aerosol QA
+          values:
+            1: Data Fill Flag
+            2: Aerosol Retrieval - Valid
+            4: Aerosol Retrieval - Interpolated
+            8: Water Pixel
+            16: Water Aerosol Retrieval Failed
+            32: Neighbor of Failed Aerosol Retrieval
+            64: Aerosol Content Content Low Bit
+            128: Aerosol Content Content High Bit
+    - name: 'radsat_qa'
+      aliases: [radsat_qa]
+      dtype: uint16
+      nodata: 1
+      units: 'bit_index'
+      flags_definition:
+        radsat_qa:
+          bits: [0,1,2,3,4,5,6,7]
+          description: Radiometric Saturation QA
+          values:
+            1: Data Fill Flag
+            2: Band 1 Data Saturation Flag
+            4: Band 2 Data Saturation Flag
+            8: Band 3 Data Saturation Flag
+            16: Band 4 Data Saturation Flag
+            32: Band 5 Data Saturation Flag
+            64: Band 6 Data Saturation Flag
+            128: Band 7 Data Saturation Flag
+            256: Unused
+            512: Band 9 Data Saturation Flag
+            1024: Band 10 Data Saturation Flag
+            2048: Band 11 Data Saturation Flag
+    - name: 'solar_azimuth_band4'
+      aliases: [solar_azimuth_band4]
+      dtype: int16
+      nodata: -32768
+      units: 'degrees'
+    - name: 'solar_zenith_band4'
+      aliases: [solar_zenith_band4]
+      dtype: int16
+      nodata: -32768
+      units: 'degrees'
+    - name: 'sensor_azimuth_band4'
+      aliases: [sensor_azimuth_band4]
+      dtype: int16
+      nodata: -32768
+      units: 'degrees'
+    - name: 'sensor_zenith_band4'
+      aliases: [sensor_zenith_band4]
+      dtype: int16
+      nodata: -32768
+      units: 'degrees'

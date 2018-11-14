@@ -1,0 +1,111 @@
+source_type: terra_aster_gdm_v2_scene
+
+output_type: terra_aster_gdm_salgar_colombia
+
+
+
+description: Terra Aster -- metre, UTM 36 projection
+
+
+
+location: '/datacube/ingested_data/TERRA_ASTER/Salgar_UTM36'
+
+file_path_template: 'TERRA_ASTER_{tile_index[0]}_{tile_index[1]}_{start_time}.nc'
+
+
+
+global_attributes:
+
+  title: CEOS Data Cube ASTER Global Elevation Model
+
+  summary: Global Elevation models from ASTER. Version 2.
+
+  source: Glabl Elevation Model Version 2
+
+  institution: CEOS
+
+  instrument: ASTER
+
+  cdm_data_type: Grid
+
+  keywords: AU/GA, NASA/GSFC/SED/ESD/ASTER, EARTH SCIENCE
+
+  platform: TERRA
+
+  processing_level: L2
+
+  product_version: '2.0.0'
+
+  product_suite: Terra ASTER GDEM
+
+  project: CEOS
+
+  coverage_content_type: derived elevation model
+
+  refferences: http://asterweb.jpl.nasa.gov/GDEM.ASP
+
+
+
+ingestion_bounds:
+
+  left: -180
+
+  bottom: -83
+
+  right: 180
+
+  top: 83
+
+
+
+storage:
+
+  driver: NetCDF CF
+
+  crs: EPSG:4326
+
+  tile_size:
+          longitude: 0.9479715
+          latitude: 0.9494975
+  resolution:
+          #colombia (1/length of 1 degree in meters there / 30 meters per pixel
+          longitude: 0.000270849
+          latitude: -0.000271285
+
+  chunking:
+
+    longitude: 200
+
+    latitude: 200
+
+    time: 1
+
+  dimension_order: ['time','latitude','longitude']
+
+
+
+measurements:
+
+  - name: dem
+
+    dtype: int16
+
+    nodata: -9999
+
+    resampling_method: nearest #'cubic', 'bilinear', 'cubic_spline', 'lanczos', 'average'`
+
+    src_varname: 'dem'
+
+    zlib: True
+
+  - name: num
+
+    dtype: int16
+
+    nodata: -9999
+
+    resampling_method: nearest #'cubic', 'bilinear', 'cubic_spline', 'lanczos', 'average'`
+
+    src_varname: 'num'
+
+    zlib: True
