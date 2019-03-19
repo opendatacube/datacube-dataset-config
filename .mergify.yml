@@ -1,7 +1,17 @@
-rules:
-  default:
-    protection:
-      required_pull_request_reviews:
-        required_approving_review_count: 1
-      required_status_checks:
-        contexts: []
+pull_request_rules:
+- name: rebase automatically into develop
+  conditions:
+  - label!=no-mergify
+  - label!=work-in-progress
+  - '#approved-reviews-by>=1'
+  - "#changes-requested-reviews-by=0"
+  - base=master
+  - status-success=continuous-integration/travis-ci/pr
+  actions:
+    merge:
+      method: rebase
+      rebase_fallback: merge
+- name: delete head branch after merge
+  conditions: []
+  actions:
+    delete_head_branch: {}
