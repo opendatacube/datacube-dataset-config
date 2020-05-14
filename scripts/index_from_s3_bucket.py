@@ -14,6 +14,12 @@ import datacube
 from datacube.index.hl import Doc2Dataset
 from datacube.utils import changes
 
+# Need to check if we're on new gdal for coordinate order
+import osgeo.gdal
+from packaging import version
+
+LON_LAT_ORDER = version.parse(osgeo.gdal.__version__) < version.parse("3.0.0")
+
 GUARDIAN = "GUARDIAN_QUEUE_EMPTY"
 AWS_PDS_TXT_SUFFIX = "MTL.txt"
 
@@ -79,11 +85,16 @@ def get_coords(geo_ref_points, spatial_ref):
     t = osr.CoordinateTransformation(spatial_ref, spatial_ref.CloneGeogCS())
 
     def transform(p):
-        lon, lat, z = t.TransformPoint(p['x'], p['y'])
-        return {'lon': lon, 'lat': lat}
-
+        if LON_LAT_ORDER:
+            # GDAL 2.0 order
+            x, y, z = t.TransformPoint(p['x'], p['y'])
+        else:
+            # GDAL 3.0 order
+            y, x, z = t.TransformPoint(p['x'], p['y'])
+            
+        return {'lon': x, 'lat': y}
+        
     return {key: transform(p) for key, p in geo_ref_points.items()}
-
 
 def satellite_ref(sat):
     """
