@@ -87,12 +87,12 @@ def get_coords(geo_ref_points, spatial_ref):
     def transform(p):
         if LON_LAT_ORDER:
             # GDAL 2.0 order
-            x, y, z = t.TransformPoint(p['x'], p['y'])
+            lon, lat, z = t.TransformPoint(p['x'], p['y'])
         else:
             # GDAL 3.0 order
-            y, x, z = t.TransformPoint(p['x'], p['y'])
+            lat, lon, z = t.TransformPoint(p['x'], p['y'])
             
-        return {'lon': x, 'lat': y}
+        return {'lon': lon, 'lat': lat}
         
     return {key: transform(p) for key, p in geo_ref_points.items()}
 
