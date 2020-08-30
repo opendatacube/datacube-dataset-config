@@ -1,0 +1,92 @@
+# This file describes Sentinel 2 Data, processed through sen2cor
+
+name: s2_sen2cor_ard_granule_EO3
+description: Sentinel-L2A MSI ARD - NBAR NBART and Pixel Quality
+metadata_type: eo3
+
+metadata:
+  product: 
+    name: s2_sen2cor_ard_granule_EO3
+
+measurements:
+    - name: 'B01_60m'
+      aliases: [band_1, coastal_aerosol]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B02_10m'
+      aliases: [band_2, blue]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B03_10m'
+      aliases: [band_3, green]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B04_10m'
+      aliases: [band_4, red]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B05_20m'
+      aliases: [band_5, veg5]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B06_20m'
+      aliases: [band_6, veg6]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B07_20m'
+      aliases: [band_7, veg7]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B08_10m'
+      aliases: [band_8, nir]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B8A_20m'
+      aliases: [band_8a, narrow_nir]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B09_60m'
+      aliases: [band_9, water_vapour]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B11_20m'
+      aliases: [band_11, swir1]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'
+    - name: 'B12_20m'
+      aliases: [band_12, swir2]
+      dtype: uint16
+      nodata: 0
+      units: 'reflectance'    
+    - name: 'SCL_20m'
+      aliases: [scl]
+      dtype: uint8
+      nodata: 0
+      units: '1'
+      flags_definition: 
+        scl:
+          bits: [1,2,3,4,5,6,7,8,9,10,11]
+          description: Scene classification
+          values:
+            1: Saturated or defective pixel 
+            2: Dark features / Shadows
+            3: Cloud shadows
+            4: Vegetation
+            5: Not vegetated
+            6: Water
+            7: Unclassified
+            8: Cloud medium probability
+            9: cloud high probability
+            10: Thin cirrus
+            11: Snow or ice
