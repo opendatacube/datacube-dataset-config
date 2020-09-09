@@ -201,16 +201,15 @@ def archive_document(doc, uri, index, sources_policy):
     logging.info("Archiving %s and all sources of %s", dataset.id, dataset.id)
 
 
-def add_dataset(doc, uri, index, sources_policy):
+def add_dataset(doc, uri, index, sources_policy=None, **kwargs):
     logging.info("Indexing %s", uri)
-    resolver = Doc2Dataset(index)
+    resolver = Doc2Dataset(index, sources_policy=sources_policy, **kwargs)
     dataset, err = resolver(doc, uri)
     if err is not None:
         logging.error("%s", err)
     else:
         try:
-            index.datasets.add(dataset,
-                               sources_policy=sources_policy)  # Source policy to be checked in sentinel 2 datase types
+            index.datasets.add(dataset)  # Source policy to be checked in sentinel 2 datase types
         except changes.DocumentMismatchError as e:
             index.datasets.update(dataset, {tuple(): changes.allow_any})
         except Exception as e:
