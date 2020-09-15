@@ -201,9 +201,9 @@ def archive_document(doc, uri, index, sources_policy):
     logging.info("Archiving %s and all sources of %s", dataset.id, dataset.id)
 
 
-def add_dataset(doc, uri, index, sources_policy=None, **kwargs):
+def add_dataset(doc, uri, index, **kwargs):
     logging.info("Indexing %s", uri)
-    resolver = Doc2Dataset(index, sources_policy=sources_policy, **kwargs)
+    resolver = Doc2Dataset(index, **kwargs)
     dataset, err = resolver(doc, uri)
     if err is not None:
         logging.error("%s", err)
