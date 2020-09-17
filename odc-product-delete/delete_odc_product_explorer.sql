@@ -7,7 +7,7 @@
 --
 -- psql -v product_name=<product-to-DELETE> -f delete_product_ows.sql -h <database-hostname> <dbname>
 --
--
+
 --
 -- After deletion of Data Cube Product, records in Cubedash tables are not cleared. Following queries will keep Explorer clean.
 --
