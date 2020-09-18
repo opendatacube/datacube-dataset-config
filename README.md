@@ -14,12 +14,12 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 ```
 
 - `delete_odc_product.sql` 
-    - This script will delete ODC product from ODC DB. 
+    - This script will delete a product and all datasets from an ODC DB. 
     - It deletes records from tables `agdc.dataset_source`, `agdc.dataset_location`, `agdc.dataset` and `agdc.dataset_type`.
     - It also deletes indexes and view related to the ODC product.
     
 - `delete_odc_product_explorer.sql` 
-    - This script will delete records related to ODC product from Explorer DB. 
+    - This script will delete records related to an ODC product from the Explorer Schema in the ODC DB. 
     - It deletes records from these tables `cubedash.dataset_spatial`, `cubedash.time_overview`, `cubedash.product`.
     - Also, it refreshes materialised view `cubedash.mv_dataset_spatial_quality`.
 
@@ -31,3 +31,4 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 Notes: 
 - AS ODC doesn't have product deletion feature with an intention to keep an immutable history of datasets, these scripts are created to manually delete an entire ODC Product. 
 - To be noted this scripts are still in beta testing phase.
+- For more detail, read [here](./odc-product-delete//README.md)

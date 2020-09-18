@@ -102,11 +102,18 @@ where dataset.dataset_type_ref = (select id
 DELETE FROM dataset_type
 where dataset_type.name = :'product_name';
 
+
+--
 -- DROP VIEW
+--
 \set view_name 'dv_' :product_name '_dataset'
+
 DROP VIEW IF EXISTS :view_name;
 
--- DROP DYNAMIC INDEXES FROM 'dataset' table
-\set index_name 'dix_' :product_name '_%'
-SELECT FORMAT('DROP INDEX CONCURRENTLY %I.%I;', schemaname, indexname) as drop_statement from pg_indexes where tablename ='dataset' and indexname like :'index_name'; \gexec
 
+--
+-- DROP DYNAMIC INDEXES FROM 'dataset' table
+--
+\set index_name 'dix_' :product_name '_%'
+
+SELECT FORMAT('DROP INDEX CONCURRENTLY %I.%I;', schemaname, indexname) as drop_statement from pg_indexes where tablename ='dataset' and indexname like :'index_name'; \gexec
