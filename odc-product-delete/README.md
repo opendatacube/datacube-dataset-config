@@ -15,7 +15,7 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 ## Delete ODC Product from OWS (`delete_odc_product_ows.sql`)
 
 - Before deleting product from ODC DB, we need check if the product has been added to OWS.
-- If the product has been added to OWS, tables in OWS makes a foreign key constraints with ODC table. 
+- If the product has been added to OWS, some of these tables have a foreign key constraint with ODC table, which will prevent rows being deleted from the main ODC database. 
 - Table `agdc.dataset_type` has foreign key constraint `wms.product_ranges_id_fkey` on table `wms.product_ranges`
 - Because of the foreign key constraint, deleting product in ODC DB will fail and raise following error:
 ```
