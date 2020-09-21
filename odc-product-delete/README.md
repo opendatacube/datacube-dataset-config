@@ -46,7 +46,7 @@ Note: The `delete_odc_product.sql` is sourced from [here](https://gist.github.co
 
 
 ## Steps to run scripts in sequence
-- First, run `delete_odc_product_ows.sql` if the product has not been added to OWS.
+- First, run `delete_odc_product_ows.sql` (optional: this step is not required if the product has not been added to OWS).
 ```
 psql -v product_name=<product-to-delete> -f delete_odc_product_ows.sql -h <database-hostname> <dbname>
 ```
