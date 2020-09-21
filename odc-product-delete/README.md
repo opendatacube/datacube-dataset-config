@@ -39,7 +39,7 @@ Note: The `delete_odc_product.sql` is sourced from [here](https://gist.github.co
 
 ## Delete ODC Product from Explorer (`delete_odc_product_explorer.sql` )
     
-- After deletion of ODC Product, records in Cubedash tables are not cleared. 
+- After deletion of ODC Product, records in Explorer's tables are not cleared. 
 - This script will delete records related to an ODC product from the Explorer Schema in the ODC DB. 
 - It deletes records from these tables `cubedash.dataset_spatial`, `cubedash.time_overview`, `cubedash.product`.
 - Also, it refreshes materialised view `cubedash.mv_dataset_spatial_quality`.
