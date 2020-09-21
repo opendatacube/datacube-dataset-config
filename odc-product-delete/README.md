@@ -4,10 +4,13 @@
     - `delete_odc_product_ows.sql`
     - `delete_odc_product.sql` 
     - `delete_odc_product_explorer.sql` 
-  
-- Use with PSQL from the command line. Each script takes <product_name> and DB credentials as an input parameter.
+    
+## WARNING!!!
+- These scripts deletes data, so review the scripts thoroughly and use it very carefully!
   
 ### Usage
+- Use with PSQL from the command line. Each script takes <product_name> and DB credentials as an input parameter.
+  
 ```
 psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostname> <dbname>
 ```

@@ -28,7 +28,7 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
     - This script needs to be run before `delete_odc_product.sql` as OWS DB maintains a foreign key to ODC DB.
     - Table `agdc.dataset_type` has foreign key constraint `wms.product_ranges_id_fkey` on table `wms.product_ranges`
 
-Notes: 
+### WARNING!!!
 - AS ODC doesn't have product deletion feature with an intention to keep an immutable history of datasets, these scripts are created to manually delete an entire ODC Product. 
-- To be noted this scripts are still in beta testing phase.
+- These scripts deletes data, so review the scripts thoroughly and use it very carefully!
 - For more detail, read [here](./odc-product-delete//README.md)
