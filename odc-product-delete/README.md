@@ -28,6 +28,14 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 - To avoid this, there is a need to run `delete_odc_product_ows.sql` script before running `delete_odc_product.sql`. 
 - This script will delete records from tables `wms.product_ranges` and `wms.sub_product_ranges`. 
 
+## Delete ODC Product from Explorer (`delete_odc_product_explorer.sql` )
+    
+- Before deletion of an product in ODC DB, Explorer's Schema needs to be cleaned as this script makes reference to ODC DB. 
+- This script will delete records related to an ODC product from the Explorer Schema in the ODC DB. 
+- It deletes records from these tables `cubedash.dataset_spatial`, `cubedash.time_overview`, `cubedash.product`.
+- Also, it refreshes materialised view `cubedash.mv_dataset_spatial_quality`.
+
+
 ## Delete ODC Product from ODC DB (`delete_odc_product.sql`)
 
 - This script will delete a product and all datasets from an ODC DB. 
@@ -38,26 +46,18 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 - It also deletes indexes and view created for that ODC product.
 
 Note: The `delete_odc_product.sql` is sourced from [here](https://gist.github.com/omad/1ae3463a123f37a9acf37213bebfde86) and additional script to delete index and view are added.
-    
-
-## Delete ODC Product from Explorer (`delete_odc_product_explorer.sql` )
-    
-- After deletion of ODC Product, records in Explorer's tables are not cleared. 
-- This script will delete records related to an ODC product from the Explorer Schema in the ODC DB. 
-- It deletes records from these tables `cubedash.dataset_spatial`, `cubedash.time_overview`, `cubedash.product`.
-- Also, it refreshes materialised view `cubedash.mv_dataset_spatial_quality`.
-
+ 
 
 ## Steps to run scripts in sequence
 - First, run `delete_odc_product_ows.sql` (optional: this step is not required if the product has not been added to OWS).
 ```
 psql -v product_name=<product-to-delete> -f delete_odc_product_ows.sql -h <database-hostname> <dbname>
 ```
-- Next run `delete_odc_product.sql` to delete the ODC product in ODC DB.
-```
-psql -v product_name=<product-to-delete> -f delete_odc_product.sql -h <database-hostname> <dbname>
-```
-- Finally run `delete_odc_product_explorer.sql` to delete products from Explorer DB.
+- Next run `delete_odc_product_explorer.sql` to delete products from Explorer DB.
 ```
 psql -v product_name=<product-to-delete> -f delete_odc_product_explorer.sql -h <database-hostname> <dbname>
+```
+- Finally run `delete_odc_product.sql` to delete the ODC product in ODC DB.
+```
+psql -v product_name=<product-to-delete> -f delete_odc_product.sql -h <database-hostname> <dbname>
 ```
