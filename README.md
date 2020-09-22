@@ -20,6 +20,7 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
     
 - `delete_odc_product_explorer.sql` 
     - This script will delete records related to an ODC product from the Explorer Schema in the ODC DB. 
+    - This script needs to be run before `delete_odc_product.sql` as script makes reference to ODC DB.
     - It deletes records from these tables `cubedash.dataset_spatial`, `cubedash.time_overview`, `cubedash.product`.
     - Also, it refreshes materialised view `cubedash.mv_dataset_spatial_quality`.
 
