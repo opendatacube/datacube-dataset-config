@@ -20,16 +20,71 @@ SELECT count(*) FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id 
 
 DELETE FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
 
+
 --
 -- for explorer version with region support
 --
 DELETE FROM cubedash.region WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
 
+
+--
+-- delete main product
+--
 SELECT count(*) FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.product WHERE name = :'product_name');
 
 DELETE FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.product WHERE name = :'product_name');
 
 SELECT count(*) FROM cubedash.product WHERE name = :'product_name';
+
+--
+-- delete lineage bond product
+--
+SELECT Count(*)
+FROM   cubedash.time_overview
+WHERE  product_ref in
+       (
+              SELECT id
+              from   cubedash.product
+              WHERE  (
+                            SELECT id
+                            FROM   agdc.dataset_type
+                            WHERE  NAME=:'product_name') = ANY (derived_product_refs)
+              OR
+                     (
+                            SELECT id
+                            FROM   agdc.dataset_type
+                            WHERE  NAME=:'product_name') = ANY (source_product_refs)
+       );
+
+DELETE
+FROM   cubedash.time_overview
+WHERE  product_ref in
+       (
+              SELECT id
+              from   cubedash.product
+              WHERE  (
+                            SELECT id
+                            FROM   agdc.dataset_type
+                            WHERE  NAME=:'product_name') = ANY (derived_product_refs)
+              OR
+                     (
+                            SELECT id
+                            FROM   agdc.dataset_type
+                            WHERE  NAME=:'product_name') = ANY (source_product_refs)
+       );
+
+DELETE
+FROM   cubedash.product
+WHERE  (
+              SELECT id
+              FROM   agdc.dataset_type
+              WHERE  NAME=:'product_name') = ANY (derived_product_refs)
+OR
+       (
+              SELECT id
+              FROM   agdc.dataset_type
+              WHERE  NAME=:'product_name') = ANY (source_product_refs);
+
 
 DELETE FROM cubedash.product WHERE name = :'product_name';
 
