@@ -20,6 +20,11 @@ SELECT count(*) FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id 
 
 DELETE FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
 
+--
+-- for explorer version with region support
+--
+DELETE FROM cubedash.region WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
+
 SELECT count(*) FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.product WHERE name = :'product_name');
 
 DELETE FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.product WHERE name = :'product_name');
