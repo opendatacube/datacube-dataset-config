@@ -36,6 +36,8 @@ DELETE FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.pr
 
 SELECT count(*) FROM cubedash.product WHERE name = :'product_name';
 
+DELETE FROM cubedash.product WHERE name = :'product_name';
+
 --
 -- delete lineage bond product
 --
@@ -86,7 +88,6 @@ OR
               WHERE  NAME=:'product_name') = ANY (source_product_refs);
 
 
-DELETE FROM cubedash.product WHERE name = :'product_name';
 
 SELECT count(*) FROM cubedash.mv_dataset_spatial_quality WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
 
