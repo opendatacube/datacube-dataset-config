@@ -39,54 +39,24 @@ SELECT count(*) FROM cubedash.product WHERE name = :'product_name';
 DELETE FROM cubedash.product WHERE name = :'product_name';
 
 --
--- delete lineage bond product
+-- remove lineage bond product from derived_product_refs
 --
-SELECT Count(*)
-FROM   cubedash.time_overview
-WHERE  product_ref in
+UPDATE cubedash.product
+SET    derived_product_refs = array_remove(derived_product_refs, (
        (
-              SELECT id
-              from   cubedash.product
-              WHERE  (
-                            SELECT id
-                            FROM   agdc.dataset_type
-                            WHERE  NAME=:'product_name') = ANY (derived_product_refs)
-              OR
-                     (
-                            SELECT id
-                            FROM   agdc.dataset_type
-                            WHERE  NAME=:'product_name') = ANY (source_product_refs)
-       );
-
-DELETE
-FROM   cubedash.time_overview
-WHERE  product_ref in
-       (
-              SELECT id
-              from   cubedash.product
-              WHERE  (
-                            SELECT id
-                            FROM   agdc.dataset_type
-                            WHERE  NAME=:'product_name') = ANY (derived_product_refs)
-              OR
-                     (
-                            SELECT id
-                            FROM   agdc.dataset_type
-                            WHERE  NAME=:'product_name') = ANY (source_product_refs)
-       );
-
-DELETE
-FROM   cubedash.product
-WHERE  (
-              SELECT id
+              SELECT id::smallint
               FROM   agdc.dataset_type
-              WHERE  NAME=:'product_name') = ANY (derived_product_refs)
-OR
-       (
-              SELECT id
-              FROM   agdc.dataset_type
-              WHERE  NAME=:'product_name') = ANY (source_product_refs);
+              WHERE  NAME=:'product_name')));
 
+--
+-- delete lineage bond product from source_product_refs
+--
+UPDATE cubedash.product
+SET    source_product_refs = array_remove(source_product_refs, (
+       (
+              SELECT id::smallint
+              FROM   agdc.dataset_type
+              WHERE  NAME=:'product_name')));
 
 
 SELECT count(*) FROM cubedash.mv_dataset_spatial_quality WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
