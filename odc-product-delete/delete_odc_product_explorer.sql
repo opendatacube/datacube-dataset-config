@@ -20,6 +20,16 @@ SELECT count(*) FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id 
 
 DELETE FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
 
+
+--
+-- for explorer version with region support
+--
+DELETE FROM cubedash.region WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
+
+
+--
+-- delete main product
+--
 SELECT count(*) FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.product WHERE name = :'product_name');
 
 DELETE FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.product WHERE name = :'product_name');
@@ -27,6 +37,27 @@ DELETE FROM cubedash.time_overview WHERE product_ref=(SELECT id FROM cubedash.pr
 SELECT count(*) FROM cubedash.product WHERE name = :'product_name';
 
 DELETE FROM cubedash.product WHERE name = :'product_name';
+
+--
+-- remove lineage bond product from derived_product_refs
+--
+UPDATE cubedash.product
+SET    derived_product_refs = array_remove(derived_product_refs, (
+       (
+              SELECT id::smallint
+              FROM   agdc.dataset_type
+              WHERE  NAME=:'product_name')));
+
+--
+-- delete lineage bond product from source_product_refs
+--
+UPDATE cubedash.product
+SET    source_product_refs = array_remove(source_product_refs, (
+       (
+              SELECT id::smallint
+              FROM   agdc.dataset_type
+              WHERE  NAME=:'product_name')));
+
 
 SELECT count(*) FROM cubedash.mv_dataset_spatial_quality WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
 
