@@ -4,6 +4,7 @@
     - `delete_odc_product_ows.sql`
     - `delete_odc_product.sql`
     - `delete_odc_product_explorer.sql`
+    - `cleanup_explorer.sql`
 
 ## WARNING!!!
 - These scripts deletes data, so review the scripts thoroughly and use it very carefully!
@@ -49,7 +50,7 @@ Note: The `delete_odc_product.sql` is sourced from [here](https://gist.github.co
 
 
 
-## Delete ODC Product from ODC DB (`delete_odc_product.sql`)
+## Cleanup explorer from ODC DB (`cleanup_explorer.sql`)
 
 - It deletes records from these tables `cubedash.dataset_spatial` for all dataset_type deleted from ODC DB
 - Then it refreshes materialised view `cubedash.mv_dataset_spatial_quality` as this materialized view directly derives off `cubedash.dataset_spatial`
