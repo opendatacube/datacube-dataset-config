@@ -98,3 +98,9 @@ export DB_USERNAME=odc_admin
 export DB_PASSWORD=<odc_admin_password>
 PGPASSWORD=$DB_PASSWORD psql -v product_name=<product-to-delete> -f delete_odc_product.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
 ```
+- Next run `cleanup_explorer.sql` to delete products from Explorer DB.
+```
+export DB_USERNAME=explorer_admin
+export DB_PASSWORD=<explorer_admin_password>
+PGPASSWORD=$DB_PASSWORD psql  -f cleanup_explorer.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
+```
