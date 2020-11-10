@@ -33,8 +33,7 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 - Before deletion of an product in ODC DB, Explorer's Schema needs to be cleaned as this script makes reference to ODC DB.
 - This script will delete records related to an ODC product from the Explorer Schema in the ODC DB.
 - It unnests the product id `derived_product_refs` and `source_product_refs` columns from `cubedash.product` table
-- It deletes records from these tables `cubedash.region`, `cubedash.dataset_spatial`, `cubedash.time_overview`, `cubedash.product`.
-- Also, it refreshes materialised view `cubedash.mv_dataset_spatial_quality`.
+- It deletes records from these tables `cubedash.region`, `cubedash.time_overview`, `cubedash.product`.
 
 
 ## Delete ODC Product from ODC DB (`delete_odc_product.sql`)
@@ -47,6 +46,14 @@ psql -v product_name=<product-to-delete> -f <scriptname.sql> -h <database-hostna
 - It also deletes indexes and view created for that ODC product.
 
 Note: The `delete_odc_product.sql` is sourced from [here](https://gist.github.com/omad/1ae3463a123f37a9acf37213bebfde86) and additional script to delete index and view are added.
+
+
+
+## Delete ODC Product from ODC DB (`delete_odc_product.sql`)
+
+- It deletes records from these tables `cubedash.dataset_spatial` for all dataset_type deleted from ODC DB
+- Then it refreshes materialised view `cubedash.mv_dataset_spatial_quality` as this materialized view directly derives off `cubedash.dataset_spatial`
+
 
 
 ## Steps to run scripts in sequence
@@ -62,7 +69,10 @@ psql -v product_name=<product-to-delete> -f delete_odc_product_explorer.sql -h <
 ```
 psql -v product_name=<product-to-delete> -f delete_odc_product.sql -h <database-hostname> <dbname>
 ```
-
+- Run `cleanup_explorer.sql` to refresh materialized view for deleted product.
+```
+psql -f cleanup_explorer.sql -h <database-hostname> <dbname>
+```
 ## Detailed Steps to run scripts in sequence
 - setup env
 ```
