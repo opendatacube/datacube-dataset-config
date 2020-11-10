@@ -16,11 +16,6 @@
 -- SELECT/DELETE PRODUCT RECORDS FROM CUBEDASH TABLES
 --
 
-SELECT count(*) FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
-
-DELETE FROM cubedash.dataset_spatial WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
-
-
 --
 -- for explorer version with region support
 --
@@ -57,8 +52,3 @@ SET    source_product_refs = array_remove(source_product_refs, (
               SELECT id::smallint
               FROM   agdc.dataset_type
               WHERE  NAME=:'product_name')));
-
-
-SELECT count(*) FROM cubedash.mv_dataset_spatial_quality WHERE dataset_type_ref=(SELECT id FROM agdc.dataset_type WHERE name=:'product_name');
-
-REFRESH MATERIALIZED VIEW CONCURRENTLY cubedash.mv_dataset_spatial_quality;
