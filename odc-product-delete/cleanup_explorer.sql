@@ -5,7 +5,7 @@
 --
 -- Use with psql from the command line:
 --
--- psql -f delete_product_ows.sql -h <database-hostname> <dbname>
+-- psql -f cleanup_explorer.sql -h <database-hostname> <dbname>
 --
 
 --
