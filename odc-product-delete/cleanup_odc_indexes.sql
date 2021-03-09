@@ -12,25 +12,26 @@
 -- Run as required to cleanup all left-over dynamic indexes
 --
 
--- delete all entry from dataset_spatial where dataset_type_ref has been deleted in agdc
 set search_path = 'agdc';
 
-SELECT name FROM datset_type;
-
-SELECT format('div_%I_%s', (select name from agdc.dataset_type limit 1), '%');
-
-select pgi.indexname from pg_indexes pgi WHERE pgi.indexname ~ (SELECT name from agdc.dataset_type limit 1);
-
-select substring(indexname, '^dix_(.*?)_lat_lon_time$') from pg_indexes pgi WHERE pgi.indexname LIKE 'dix_%_lat_lon_time';
-
-select name from agdc.dataset_type where name IN (select substring(indexname, '^dix_(.*?)_lat_lon_time$') as index_p_name from pg_indexes pgi WHERE pgi.indexname LIKE 'dix_%_lat_lon_time');
-
-with index_p_name as (select substring(indexname, '^dix_(.*?)_lat_lon_time$') as name from pg_indexes WHERE indexname LIKE 'dix_%_lat_lon_time') select name from index_p_name where name not in (select name from agdc.dataset_type);
-
-with index_p_name as (select substring(indexname, '^dix_(.*?)_instrument$') as name from pg_indexes WHERE indexname LIKE 'dix_%_instrument') select name from index_p_name where name not in (select name from agdc.dataset_type);
-
-with index_p_name as (select substring(indexname, '^dix_(.*?)_platform$') as name from pg_indexes WHERE indexname LIKE 'dix_%_platform') select name from index_p_name where name not in (select name from agdc.dataset_type);
-
-with index_p_name as (select substring(indexname, '^dix_(.*?)_time_lat_lon$') as name from pg_indexes WHERE indexname LIKE 'dix_%_time_lat_lon') select name from index_p_name where name not in (select name from agdc.dataset_type);
-
-with viewcheck as (select substring(viewname, '^dv_(.*?)_dataset$') as vname from pg_catalog.pg_views where viewname LIKE 'dv_%_dataset') select vname from viewcheck where vname not in (select name from agdc.dataset_type);
+-- Select the current list of dataset_type (product) names and compare to
+-- the list of index names to identify the residue indexes with deleted dataset_type
+-- then finally delete any indexes that are still in the database for the deleted product
+WITH residue_index_name AS ( WITH index_p_name AS
+(
+                SELECT DISTINCT Substring(indexname, '^dix_(.*?)_(lat_lon_time|instrument|platform|time_lat_lon)$') AS index_name_wt_suffix
+                FROM            pg_indexes
+                WHERE           indexname LIKE any (array['dix_%_lat_lon_time', 'dix_%_instrument', 'dix_%_platform', 'dix_%_time_lat_lon']))
+SELECT index_name_wt_suffix
+FROM   index_p_name
+WHERE  index_name_wt_suffix NOT IN
+       (
+              SELECT NAME
+              FROM   agdc.dataset_type))
+SELECT FORMAT('DROP INDEX CONCURRENTLY %I.%I;', schemaname, indexname) as drop_statement
+FROM   pg_indexes
+WHERE  tablename='dataset'
+AND    indexname LIKE ANY
+       (
+              SELECT concat ('dix_', index_name_wt_suffix, '%')
+              FROM   residue_index_name);  \gexec
