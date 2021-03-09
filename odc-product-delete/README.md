@@ -5,6 +5,7 @@
     - `delete_odc_product.sql`
     - `delete_odc_product_explorer.sql`
     - `cleanup_explorer.sql`
+    - `cleanup_odc_indexes.sql`
 
 ## WARNING!!!
 - These scripts deletes data, so review the scripts thoroughly and use it very carefully!
@@ -56,6 +57,9 @@ Note: The `delete_odc_product.sql` is sourced from [here](https://gist.github.co
 - Then it refreshes materialised view `cubedash.mv_dataset_spatial_quality` as this materialized view directly derives off `cubedash.dataset_spatial`
 
 
+## Cleanup residue indexes from ODC DB (`cleanup_odc_indexes.sql`)
+
+- It deletes indexes from `pg_indexes` for all dataset_type deleted from ODC DB
 
 ## Steps to run scripts in sequence
 - First, run `delete_odc_product_ows.sql` (optional: this step is not required if the product has not been added to OWS).
@@ -74,8 +78,12 @@ psql -v product_name=<product-to-delete> -f delete_odc_product.sql -h <database-
 ```
 psql -f cleanup_explorer.sql -h <database-hostname> <dbname>
 ```
+- Run `cleanup_odc_indexes.sql` to refresh materialized view for deleted product.
+```
+psql -f cleanup_odc_indexes.sql -h <database-hostname> <dbname>
+```
 ## Detailed Steps to run scripts in sequence
-- setup env
+### setup common env
 ```
 export DB_PORT=5432
 export DB_DATABASE=dbname
@@ -104,4 +112,11 @@ PGPASSWORD=$DB_PASSWORD psql -v product_name=<product-to-delete> -f delete_odc_p
 export DB_USERNAME=explorer_admin
 export DB_PASSWORD=<explorer_admin_password>
 PGPASSWORD=$DB_PASSWORD psql  -f cleanup_explorer.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
+```
+
+### Ad-hoc / on-demand / as required script
+```
+export DB_USERNAME=odc_admin
+export DB_PASSWORD=<odc_admin_password>
+PGPASSWORD=$DB_PASSWORD psql -f cleanup_odc_indexes.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
 ```
