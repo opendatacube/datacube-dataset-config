@@ -4,7 +4,7 @@ Scripts for indexing data into ODC instances.
 
 ## Documented Examples
 
-* [Sentinel-2 Cloud-Optimised GeoTIFFs.](sentinel-2-l2a-cogs.md])
+* [Sentinel-2 Cloud-Optimised GeoTIFFs.](sentinel-2-l2a-cogs.md)
 
 ## GDAL3 Note
 
