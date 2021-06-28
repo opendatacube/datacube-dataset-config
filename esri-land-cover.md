@@ -78,3 +78,5 @@ bounds=range(0,12)
 norm = mcolours.BoundaryNorm(np.array(bounds), cmap.N)
 ds.isel(time=0).classification.plot.imshow(cmap=cmap, norm=norm, size=10)
 ```
+
+![ESRI Land Cover](images/esri_land_cover.png)
