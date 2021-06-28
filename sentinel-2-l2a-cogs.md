@@ -8,7 +8,7 @@ There are two ways to index this data that are briefly outlined below.
 An [ODC product definition for the S-2 COGs](products/s2_l2a.odc-product.yaml) is inluded in this repo. Add this to datacube using the following command:
 
 ```bash
-datacube product add products/2_l2a.odc-product.yaml
+datacube product add products/s2_l2a.odc-product.yaml
 ```
 
 ## Installing the required tools
