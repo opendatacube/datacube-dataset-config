@@ -88,24 +88,25 @@ psql -f cleanup_odc_indexes.sql -h <database-hostname> <dbname>
 export DB_PORT=5432
 export DB_DATABASE=dbname
 export DB_HOSTNAME=localhost
+export PRODUCT=product
 ```
 - First, run `delete_odc_product_ows.sql` (optional: this step is not required if the product has not been added to OWS).
 ```
 export DB_USERNAME=ows_admin
 export DB_PASSWORD=<ows_admin_password>
-PGPASSWORD=$DB_PASSWORD psql -v product_name=<product-to-delete> -f delete_odc_product_ows.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
+PGPASSWORD=$DB_PASSWORD psql -v product_name=$PRODUCT -f delete_odc_product_ows.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
 ```
 - Next run `delete_odc_product_explorer.sql` to delete products from Explorer DB.
 ```
 export DB_USERNAME=explorer_admin
 export DB_PASSWORD=<explorer_admin_password>
-PGPASSWORD=$DB_PASSWORD psql -v product_name=<product-to-delete> -f delete_odc_product_explorer.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
+PGPASSWORD=$DB_PASSWORD psql -v product_name=$PRODUCT -f delete_odc_product_explorer.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
 ```
 - Finally run `delete_odc_product.sql` to delete the ODC product in ODC DB.
 ```
 export DB_USERNAME=odc_admin
 export DB_PASSWORD=<odc_admin_password>
-PGPASSWORD=$DB_PASSWORD psql -v product_name=<product-to-delete> -f delete_odc_product.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
+PGPASSWORD=$DB_PASSWORD psql -v product_name=$PRODUCT -f delete_odc_product.sql -h $DB_HOSTNAME $DB_DATABASE -U $DB_USERNAME -p $DB_PORT
 ```
 - Next run `cleanup_explorer.sql` to delete products from Explorer DB.
 ```
