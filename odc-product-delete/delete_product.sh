@@ -2,6 +2,13 @@
 
 # Caution: ensure child products are removed first
 
+read -p "Are you sure you want to delete product ${PRODUCT_NAME}? (Y to continue): " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
+fi
+
 # Delete from Explorer
 PGPASSWORD=$EXPLORER_PASSWORD psql -U $EXPLORER_USERNAME -d $DB_DATABASE -h $DB_HOSTNAME \
   -f delete_odc_product_explorer.sql -v product_name=$PRODUCT_NAME
