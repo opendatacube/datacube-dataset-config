@@ -56,8 +56,7 @@ Indexing for a region of interest can be done using the STAC API, like this:
 stac-to-dc \
 --bbox='25,20,35,30' \
 --collections='sentinel-s2-l2a-cogs' \
---datetime='2020-01-01/2020-03-31' \
-s2_l2a
+--datetime='2020-01-01/2020-03-31'
 ```
 
 You can change the bounding box or datetime range to search anywhere in the world.
