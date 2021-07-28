@@ -1,0 +1,13 @@
+name: nasadem
+description: NASADEM from Microsoft's Planetary Computer 
+metadata_type: eo3
+
+metadata:
+  product:
+    name: nasadem
+
+measurements:
+- name: 'elevation'
+  units: '1'
+  dtype: 'int16'
+  nodata: -32768
