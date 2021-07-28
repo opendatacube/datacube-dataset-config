@@ -1,5 +1,5 @@
 ---
-name: LANDSAT_8
+name: landsat_8
 description: USGS Landsat 8 Collection 2 Level-2 Surface Reflectance
 metadata_type: eo3
 
@@ -7,7 +7,7 @@ license: CC-BY-4.0
 
 metadata:
   product:
-    name: LANDSAT_8
+    name: landsat_8
 
 measurements:
   - name: coastal
@@ -239,7 +239,7 @@ measurements:
           3: high
 
 ---
-name: LANDSAT_7
+name: landsat_7
 description: USGS Landsat 7 Collection 2 Level-2 Surface Reflectance
 metadata_type: eo3
 
@@ -247,7 +247,7 @@ license: CC-BY-4.0
 
 metadata:
   product:
-    name: LANDSAT_7
+    name: landsat_7
 
 measurements:
   - name: blue
@@ -485,7 +485,7 @@ measurements:
           1: true
 
 ---
-name: LANDSAT_5
+name: landsat_5
 description: USGS Landsat t Collection 2 Level-2 Surface Reflectance
 metadata_type: eo3
 
@@ -493,7 +493,7 @@ license: CC-BY-4.0
 
 metadata:
   product:
-    name: LANDSAT_7
+    name: landsat_5
 
 measurements:
   - name: blue
