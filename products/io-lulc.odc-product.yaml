@@ -1,0 +1,13 @@
+name: io-lulc
+description: ESRI Landcover Classification
+metadata_type: eo3
+
+metadata:
+  product:
+    name: io-lulc
+
+measurements:
+- name: 'data'
+  units: '1'
+  dtype: 'uint8'
+  nodata: 0
