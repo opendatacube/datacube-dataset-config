@@ -6,6 +6,12 @@ metadata:
   product:
     name: nasadem
 
+storage:
+  crs: EPSG:4326
+  resolution:
+    longitude: 0.0002777777777777778
+    latitude: -0.0002777777777777778
+
 measurements:
 - name: 'elevation'
   units: '1'
