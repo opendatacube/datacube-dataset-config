@@ -1,0 +1,293 @@
+---
+name: landsat_8_c2_l2
+description: USGS Landsat 8 Collection 2 Level-2 Surface Reflectance
+metadata_type: eo3
+
+license: CC-BY-4.0
+
+metadata:
+  product:
+    name: landsat_8_c2_l2
+
+measurements:
+  - name: SR_B1
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [coastal, band_1, coastal_aerosol]
+
+  - name: SR_B2
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [blue, band_2]
+
+  - name: SR_B3
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [green, band_3]
+
+  - name: SR_B4
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [red, band_4]
+
+  - name: SR_B5
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [nir_08, band_5]
+
+  - name: SR_B6
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [swir_16, band_6, swir_1]
+
+  - name: SR_B7
+    dtype: "uint16"
+    units: "1"
+    nodata: 0
+    aliases: [swir_22, band_7, swir_2]
+
+  - name: ST_QA
+    dtype: "int16"
+    units: "Kelvin"
+    nodata: -9999
+    aliases: [st_qa, surface_temperature_quality]
+
+  - name: ST_B10
+    units: "Kelvin"
+    dtype: "uint16"
+    nodata: 0
+    aliases: [lwir11, st, surface_temperature]
+
+  - name: ST_TRAD
+    dtype: "int16"
+    units: "W/(m2.sr.μm)"
+    nodata: -9999
+    aliases: [trad, thermal_radiance]
+
+  - name: ST_URAD
+    dtype: "int16"
+    units: "W/(m2.sr.μm)"
+    nodata: -9999
+    aliases: [urad, upwell_radiance]
+
+  - name: ST_DRAD
+    dtype: "int16"
+    units: "W/(m2.sr.μm)"
+    nodata: -9999
+    aliases: [drad, downwell_radiance]
+
+  - name: ST_ATRAN
+    dtype: "int16"
+    units: "1"
+    nodata: -9999
+    aliases: [atran, atmospheric_transmittance]
+
+  - name: ST_EMIS
+    dtype: "int16"
+    units: "1"
+    nodata: -9999
+    aliases: [emis, emissivity]
+
+  - name: ST_EMSD
+    dtype: "int16"
+    units: "1"
+    nodata: -9999
+    aliases: [emsd, emissivity_stddev]
+
+  - name: ST_CDIST
+    dtype: "int16"
+    units: "Kilometers"
+    nodata: -9999
+    aliases: [cdist, cloud_distance]
+
+  - name: QA_PIXEL
+    dtype: "uint16"
+    units: "bit_index"
+    nodata: 1
+    aliases: [pixel_qa, pq, pixel_quality]
+    flags_definition:
+      nodata:
+        bits: 0
+        values:
+          0: false
+          1: true
+      dilated_cloud:
+        bits: 1
+        values:
+          0: not_dilated
+          1: dilated
+      cirrus:
+        bits: 2
+        values:
+          0: not_high_confidence
+          1: high_confidence
+      cloud:
+        bits: 3
+        values:
+          0: not_high_confidence
+          1: high_confidence
+      cloud_shadow:
+        bits: 4
+        values:
+          0: not_high_confidence
+          1: high_confidence
+      snow:
+        bits: 5
+        values:
+          0: not_high_confidence
+          1: high_confidence
+      clear:
+        bits: 6
+        values:
+          0: false
+          1: true
+      water:
+        bits: 7
+        values:
+          0: land_or_cloud
+          1: water
+      cloud_confidence:
+        bits: [8, 9]
+        values:
+          0: none
+          1: low
+          2: medium
+          3: high
+      cloud_shadow_confidence:
+        bits: [10, 11]
+        values:
+          0: none
+          1: low
+          2: reserved
+          3: high
+      snow_ice_confidence:
+        bits: [12, 13]
+        values:
+          0: none
+          1: low
+          2: reserved
+          3: high
+      cirrus_confidence:
+        bits: [14, 15]
+        values:
+          0: none
+          1: low
+          2: reserved
+          3: high
+
+  - name: QA_RADSAT
+    dtype: "uint16"
+    units: "bit_index"
+    nodata: 0
+    aliases: [radsat, radiometric_saturation]
+    flags_definition:
+      band_1_saturation:
+        bits: 0
+        values:
+          0: false
+          1: true
+      band_2_saturation:
+        bits: 1
+        values:
+          0: false
+          1: true
+      band_3_saturation:
+        bits: 2
+        values:
+          0: false
+          1: true
+      band_4_saturation:
+        bits: 3
+        values:
+          0: false
+          1: true
+      band_5_saturation:
+        bits: 4
+        values:
+          0: false
+          1: true
+      band_6_saturation:
+        bits: 5
+        values:
+          0: false
+          1: true
+      band_7_saturation:
+        bits: 6
+        values:
+          0: false
+          1: true
+      blue_saturation:
+        bits: 1
+        values:
+          0: false
+          1: true
+      green_saturation:
+        bits: 2
+        values:
+          0: false
+          1: true
+      red_saturation:
+        bits: 3
+        values:
+          0: false
+          1: true
+      nir_saturation:
+        bits: 4
+        values:
+          0: false
+          1: true
+      swir_1_saturation:
+        bits: 5
+        values:
+          0: false
+          1: true
+      swir_2_saturation:
+        bits: 6
+        values:
+          0: false
+          1: true
+      terrain_occlusion:
+        bits: 11
+        values:
+          0: false
+          1: true
+
+  - name: SR_QA_AEROSOL
+    dtype: "uint8"
+    units: "bit_index"
+    nodata: 1
+    aliases: [qa_aerosol, aerosol_qa]
+    flags_definition:
+      nodata:
+        bits: 0
+        values:
+          0: false
+          1: true
+      valid_aerosol_retrieval:
+        bits: 1
+        values:
+          0: false
+          1: true
+      water:
+        bits: 2
+        values:
+          0: false
+          1: true
+      interpolated_aerosol:
+        bits: 5
+        values:
+          0: false
+          1: true
+      aerosol_level:
+        bits: [6, 7]
+        values:
+          0: climatology
+          1: low
+          2: medium
+          3: high
