@@ -14,7 +14,7 @@ PGPASSWORD=$EXPLORER_PASSWORD psql -U $EXPLORER_USERNAME -d $DB_DATABASE -h $DB_
   -f delete_odc_product_explorer.sql -v product_name=$PRODUCT_NAME
 
 # Delete from OWS
-PGPASSWORD=$DB_PASSWORD psql -U $DB_USERNAME -d $DB_DATABASE -h $DB_HOSTNAME \
+PGPASSWORD=$OWS_PASSWORD psql -U $OWS_USERNAME -d $DB_DATABASE -h $DB_HOSTNAME \
   -f delete_odc_product_ows.sql -v product_name=$PRODUCT_NAME
 
 # Delete from ODC
