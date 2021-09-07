@@ -117,6 +117,10 @@ export DB_PASSWORD=secretexample
 export EXPLORER_USERNAME=username
 export EXPLORER_PASSWORD=explorersecret
 
+# OWS
+export OWS_USERNAME=username
+export OWS_PASSWORD=owssecret
+
 # Product
 export PRODUCT_NAME=product
 ```
