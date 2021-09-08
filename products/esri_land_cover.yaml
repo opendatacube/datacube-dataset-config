@@ -1,3 +1,4 @@
+# This is deprecated!
 name: esri_land_cover
 description: ESRI Landcover Classification
 metadata_type: eo3
@@ -7,7 +8,25 @@ metadata:
     name: esri_land_cover
 
 measurements:
-- name: 'classification'
-  units: '1'
-  dtype: 'uint8'
-  nodata: 0
+  - name: "classification"
+    aliases: [data, class]
+    units: "1"
+    dtype: uint8
+    nodata: 0
+    flags_definition:
+      classification:
+        bits: [0, 1, 2, 3, 4, 5, 6, 7]
+        description: Land Use/Land Cover class
+        values:
+          0: no data
+          1: water
+          2: trees
+          3: grass
+          4: flooded vegetation
+          5: crops
+          6: scrub/shrub
+          7: built area
+          8: bare ground
+          9: snow/ice
+          10: clouds
+          11: not used
