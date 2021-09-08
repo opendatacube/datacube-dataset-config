@@ -7,13 +7,13 @@ metadata:
     name: io_lulc
 
 measurements:
-  - name: "classification"
-    aliases: [data, class]
+  - name: "data"
+    aliases: [classification]
     units: "1"
     dtype: uint8
     nodata: 0
     flags_definition:
-      classification:
+      data:
         bits: [0, 1, 2, 3, 4, 5, 6, 7]
         description: Land Use/Land Cover class
         values:

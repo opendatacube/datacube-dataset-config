@@ -12,4 +12,3 @@ measurements:
   units: '1'
   dtype: 'uint8'
   nodata: 0
-  
