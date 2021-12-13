@@ -50,3 +50,5 @@ You can change the bounding box or datetime range to search anywhere in the worl
 
 Please note that you must use AWS credentials to access the data from the requester pays bucket.
 The USGS has information about [cloud data access here](https://www.usgs.gov/node/28686).
+
+There are [some docs here](https://datacube-core.readthedocs.io/en/latest/api/utilities/generate/datacube.utils.aws.configure_s3_access.html?highlight=requester_pays) on how to set up the requester pays flag using the ODC.
