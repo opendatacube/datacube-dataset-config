@@ -4,8 +4,9 @@ Scripts for indexing data into ODC instances.
 
 ## Documented Examples
 
-* [Sentinel-2 Cloud-Optimised GeoTIFFs.](sentinel-2-l2a-cogs.md)
-* [ESRI Land Cover.](esri-land-cover.md)
+* [Sentinel-2 Cloud-Optimised GeoTIFFs](sentinel-2-l2a-cogs.md)
+* [USGS Landsat Collection 2](usgs-landsat-collection2.md)
+* [ESRI Land Cover](esri-land-cover.md)
 
 ## GDAL3 Note
 
