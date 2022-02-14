@@ -32,14 +32,14 @@ A single STAC document can be indexed direct from S3 like this:
 
 ```bash
 s3-to-dc --stac --no-sign-request \
-s3://deafrica-sentinel-2/sentinel-s2-l2a-cogs/37/M/CS/2017/10/**/S2A_37MCS_20171016_0_L2A.json s2_l2a
+s3://sentinel-cogs/sentinel-s2-l2a-cogs/37/M/CS/2017/10/**/S2A_37MCS_20171016_0_L2A.json s2_l2a
 ```
 
 Or all scenes for a single MGRS code like this:
 
 ```bash
 s3-to-dc --stac --no-sign-request \
-"s3://deafrica-sentinel-2/sentinel-s2-l2a-cogs/37/M/CS/**/*S2A_37MCS_20171016_0_L2A*.json" s2_l2a
+"s3://sentinel-cogs/sentinel-s2-l2a-cogs/37/M/CS/**/*S2A_37MCS_20171016_0_L2A*.json" s2_l2a
 ```
 
 If successful, you should see a message that reads something like this:
