@@ -16,7 +16,7 @@ datacube product add products/lsX_c2l2_sr.odc-product.yaml
 or
 
 ``` bash
-datacube product add https://raw.githubusercontent.com/opendatacube/datacube-dataset-config/main/products/lsX_c2l2_sr.yaml
+datacube product add https://raw.githubusercontent.com/opendatacube/datacube-dataset-config/main/products/lsX_c2l2_sr.odc-product.yaml
 ```
 
 ## Installing the required tools
