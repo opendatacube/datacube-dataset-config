@@ -239,7 +239,6 @@ measurements:
           3: high
 
 ---
----
 name: ls8_c2l2_sr
 description: USGS Landsat 8 Collection 2 Level-2 Surface Reflectance
 metadata_type: eo3
@@ -515,7 +514,7 @@ measurements:
     nodata: 0
     aliases: [SR_B4, band_4, nir]
 
-  - name: swir16 
+  - name: swir16
     dtype: "uint16"
     units: "1"
     nodata: 0
@@ -761,7 +760,7 @@ measurements:
     nodata: 0
     aliases: [SR_B4, band_4, nir]
 
-  - name: swir16 
+  - name: swir16
     dtype: "uint16"
     units: "1"
     nodata: 0
