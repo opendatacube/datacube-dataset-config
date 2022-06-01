@@ -1,5 +1,5 @@
 name: io_lulc
-description: Impact Observatory (ESRI) Landcover Classification
+description: Impact Observatory (ESRI) Landcover Classification 9 Class
 metadata_type: eo3
 
 metadata:
@@ -20,12 +20,12 @@ measurements:
           0: no data
           1: water
           2: trees
-          3: grass
+          3: not used
           4: flooded vegetation
           5: crops
-          6: scrub/shrub
+          6: not used
           7: built area
           8: bare ground
           9: snow/ice
           10: clouds
-          11: not used
+          11: rangeland
