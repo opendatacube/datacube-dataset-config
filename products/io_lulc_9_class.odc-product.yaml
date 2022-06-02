@@ -1,10 +1,10 @@
-name: io_lulc
-description: Impact Observatory (ESRI) Landcover Classification
+name: io_lulc_9_class
+description: Impact Observatory (ESRI) Landcover Classification 9 Class
 metadata_type: eo3
 
 metadata:
   product:
-    name: io_lulc
+    name: io_lulc_9_class
 
 measurements:
   - name: "data"
@@ -28,4 +28,4 @@ measurements:
           8: bare ground
           9: snow/ice
           10: clouds
-          11: not used
+          11: rangeland
