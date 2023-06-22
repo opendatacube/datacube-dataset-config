@@ -1,0 +1,28 @@
+---
+name: sentinel_1_rtc
+description: Sentinel-1 Radiometrically Terrain Corrected (RTC)
+  from the Microsoft Planetary Computer.
+metadata_type: eo3
+
+metadata:
+  product:
+    name: sentinel_1_rtc
+
+storage:
+  crs: EPSG:4326
+  resolution:
+    longitude: 0.0002
+    latitude: -0.0002
+
+measurements:
+  - name: "vv"
+    aliases: [VV]
+    units: "1"
+    dtype: float32
+    nodata: -32768.0
+
+  - name: "vh"
+    aliases: [VH]
+    units: "1"
+    dtype: float32
+    nodata: -32768.0
