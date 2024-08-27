@@ -1,0 +1,19 @@
+name: cop_dem_glo_30
+description: Copernicus DEM 30 m
+metadata_type: eo3
+
+metadata:
+  product:
+    name: cop_dem_glo_30
+
+storage:
+  crs: EPSG:4326
+  resolution:
+    longitude: 0.0002777777777777778
+    latitude: -0.0002777777777777778
+
+measurements:
+- name: 'data'
+  units: '1'
+  dtype: 'float32'
+  nodata: "NaN"
