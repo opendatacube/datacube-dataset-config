@@ -726,7 +726,7 @@ measurements:
 
 ---
 name: ls5_c2l2_sr
-description: USGS Landsat t Collection 2 Level-2 Surface Reflectance
+description: USGS Landsat 5 Collection 2 Level-2 Surface Reflectance
 metadata_type: eo3
 
 license: CC-BY-4.0
